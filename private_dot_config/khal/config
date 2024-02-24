@@ -1,0 +1,32 @@
+[calendars]
+
+[[private]]
+    path = "~/.local/share/khal/calendars/private"
+    color = "light magenta"
+
+[[gmail]]
+    path = "~/calendars/dcheld@gmail.com/"
+    color = "dark magenta"
+
+[[cacco]]
+    path = "~/.calendars/c5i68sj5edpm4rrfdchm6rreehgm6t3j81jn4rrle0n7cbj3c5m6arj4c5p2sprfdtjmop9ecdnmq@virtual/"
+    color = "brown"
+
+[[holidays]]
+    path = "~/.calendars/e1q2sojic5t6ir39c5n26q3fdhkm8obp81jn4rrle0n7cbj3c5m6arj4c5p2sprfdtjmop9ecdnmq@virtual/"
+    color = "light blue"
+
+[locale]
+    default_timezone = America/Sao_Paulo
+
+    timeformat = %H:%M
+    dateformat = %d/%m/%Y
+    longdateformat = %d/%m/%Y
+    datetimeformat = %d/%m/%Y %H:%M
+    longdatetimeformat = %d/%m/%Y %H:%M
+
+    firstweekday = 6
+
+[default]
+    default_calendar = gmail
+    highlight_event_days = True  # the default is False
