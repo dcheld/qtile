@@ -1,0 +1,77 @@
+{
+  //General
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "editor.fontFamily": "MesloLGM Nerd Font",
+  "editor.fontSize": 12,
+  "terminal.integrated.fontFamily": "MesloLGM Nerd Font",
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.customGlyphs": false,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 4,
+  "dotnetAcquisitionExtension.existingDotnetPath": [
+    {
+      "extensionId": "ms-dotnettools.csharp",
+      "path": "~/.dotnet"
+    }
+  ],
+  // vim configs
+  "vim.easymotion": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": false,
+  "vim.hlsearch": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": [
+        "j",
+        "j"
+      ],
+      "after": [
+        "<Esc>"
+      ]
+    }
+  ],
+  "vim.leader": "<space>",
+  "vim.handleKeys": {
+    "<C-d>": true,
+    "<C-u>": true
+  },
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  // Angular
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "emmet.triggerExpansionOnTab": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  // Formatters
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  },
+  "[sql]": {
+    "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
+  },
+  "redhat.telemetry.enabled": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[dockercompose]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "editor.renderWhitespace": "all",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "window.zoomLevel": 1,
+  "workbench.startupEditor": "none",
+  "workbench.editor.enablePreview": false,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "eslint.codeActionsOnSave.rules": null,
+  "editor.stickyScroll.enabled": false
+}

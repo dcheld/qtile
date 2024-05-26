@@ -7,12 +7,15 @@ cd /tmp/yay
 makepkg -si
 cd -
 
-sudo pacman -R --noconfirm vim
+sudo pacman -R --noconfirm vim || true
+
+yay -Syy --noconfirm;
 
 yay -S --noconfirm \
     polkit rxvt-unicode xsensors \
     xss-lock xscreensaver redshift \
     nemo nemo-seahorse clipmenu volctl blueman-applet xfce4-power-manager rofi \
     podman podman-docker \
-    gvim ttf-meslo-nerd
+    gvim ttf-meslo-nerd \
+    extra/dconf extra/dconf-editor
 
