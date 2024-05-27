@@ -1,6 +1,7 @@
 [user]
 	email = dcheld@gmail.com
 	name = Douglas Held
+    signingkey = E06E62B4061D5E58
 [alias]
 	aliases = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 	co = checkout
@@ -13,3 +14,5 @@
 	rb = rebase
 	compare = "! f() { git rev-list --left-right --count ${2-HEAD}...${1-master}; }; f"
 	pullforce = ! git stash -u && git pull && git stash pop
+[commit]
+	gpgsign = true
