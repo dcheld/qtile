@@ -410,11 +410,17 @@ def init_widgets_list():
                     foreground = colors[2],
                     background = colors[1],
                     ),
-            widget.CurrentLayout(
-                    font = "Noto Sans Bold",
-                    foreground = colors[5],
-                    background = colors[1],
-                    ),
+            # widget.CurrentLayout(
+            #         font = "Noto Sans Bold",
+            #         foreground = colors[5],
+            #         background = colors[1],
+            #         ),
+            widget.CurrentLayoutIcon(
+                    custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
+                    foreground=colors[1],
+                    background=colors[0],
+                    padding=0,
+                    scale=0.7),
             widget.Sep(
                     linewidth = 1,
                     padding = 10,
