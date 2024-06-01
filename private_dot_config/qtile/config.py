@@ -306,7 +306,7 @@ group_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",]
 # FOR AZERTY KEYBOARDS
 #group_names = ["ampersand", "eacute", "quotedbl", "apostrophe", "parenleft", "section", "egrave", "exclam", "ccedilla", "agrave",]
 
-group_labels = ["1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "0",]
+group_labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",]
 # group_labels = ["", "", "", "", "", "", "", "", "", "",]
 #group_labels = ["Web", "Edit/chat", "Image", "Gimp", "Meld", "Video", "Vb", "Files", "Mail", "Music",]
 
@@ -403,6 +403,7 @@ def init_widgets_list():
                     background = colors[1],
                     inactive="#B2BEB5",
                     highlight_color = ["#6790eb", "#120a8f",],
+                    padding=5,
                     ),
             widget.Sep(
                     linewidth = 1,
