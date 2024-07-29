@@ -21,7 +21,8 @@ applicationLaunch = f"{home}/.config/rofi/launchers/type-3/launcher.sh"
 calendar = 'khal interactive'
 fileManager = "nemo"
 processManager = "gnome-system-monitor"
-musicPlayer = "flatpak run com.spotify.Client"
+# musicPlayer = "flatpak run com.spotify.Client"
+musicPlayer = """google-chrome-stable --app="http://music.youtube.com/" --class=WebApp-YT7567 --name=WebApp-YT7567 --user-data-dir=/home/dcheld/.local/share/ice/profiles/YT7567"""
 # browser = "google-chrome-stable"
 browser = "google-chrome-stable"
 sensors = "watch -n 1 sensors"
@@ -272,10 +273,11 @@ def init_scratchpad():
                     DropDown("media-play",
                         musicPlayer,
                         y = y_position,
-                        height = height,
-                        on_focus_lost_hide = True,
-                        warp_pointer = warp_pointer,
-                        match=Match(wm_class="spotify")),
+                        x = 0.15,
+                        height = 0.65,
+                        width = 0.7,
+                        on_focus_lost_hide = False,
+                        warp_pointer = warp_pointer),
 
                     # Calendar
                     DropDown("calendar",
