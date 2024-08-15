@@ -233,7 +233,7 @@ def window_to_previous_group(window, switch_group: bool = False):
 def window_to_group(window, step, switch_group: bool = False):
     current_index = window.qtile.groups.index(window.group)
     next_index = (current_index + step) % len(window.qtile.groups)
-    window.cmd_togroup(window.qtile.groups[next_index].name, switch_group=switch_group)
+    window.togroup(window.qtile.groups[next_index].name, switch_group=switch_group)
 
 keys.extend([
     # MOVE WINDOW TO NEXT SCREEN
@@ -397,7 +397,7 @@ def init_widgets_list():
                     filename = "~/.icons/custom-download/archlinux-light.svg",
                     margin_x = 5,
                     background = colors[1],
-                    mouse_callbacks = {"Button1": lambda: qtile.cmd_spawn(applicationLaunch)}
+                    mouse_callbacks = {"Button1": lambda: qtile.spawn(applicationLaunch)}
                     ),
             widget.GroupBox(font="FontAwesome",
                     fontsize = 14,
@@ -500,7 +500,7 @@ def init_widgets_list():
                      fontsize=14,
                      format=' {temp:.0f}{unit}',
                      tag_sensor = "Package id 0",
-                     mouse_callbacks={"Button1": lambda: qtile.cmd_spawn(console_launcher(sensors))},
+                     mouse_callbacks={"Button1": lambda: qtile.spawn(console_launcher(sensors))},
                      ),
             # battery option 1  ArcoLinux Horizontal icons do not forget to import arcobattery at the top
             widget.Sep(
@@ -591,7 +591,7 @@ def init_widgets_list():
                      background=colors[1],
                      padding = 0,
                      fontsize=16,
-                     mouse_callbacks={"Button1": lambda: qtile.cmd_spawn(clipboard)},
+                     mouse_callbacks={"Button1": lambda: qtile.spawn(clipboard)},
                      ),
             widget.Sep(
                      linewidth = 1,
@@ -617,7 +617,7 @@ def init_widgets_list():
                      background=colors[1],
                      padding = 0,
                      fontsize=16,
-                     mouse_callbacks={"Button1": lambda: qtile.cmd_spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'calendar'")}
+                     mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'calendar'")}
                      ),
             widget.Clock(
                      foreground = colors[5],
@@ -631,7 +631,7 @@ def init_widgets_list():
                      foreground = colors[6],
                      fontsize = 17,
                      padding = 17,
-                     mouse_callbacks={"Button1": lambda: qtile.cmd_spawn(rofi_power_menu_cmd)},
+                     mouse_callbacks={"Button1": lambda: qtile.spawn(rofi_power_menu_cmd)},
                      ),
             # widget.QuickExit(),
     ]
