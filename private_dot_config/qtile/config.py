@@ -15,6 +15,11 @@ ctrl = "control"
 shift = "shift"
 home = os.path.expanduser('~')
 
+if qtile.core.name == "x11":
+    term = "urxvt"
+elif qtile.core.name == "wayland":
+    term = "foot"
+
 terminal = guess_terminal()
 rofi_power_menu_cmd = f"{home}/.config/rofi/applets/bin/powermenu.sh"
 applicationLaunch = f"{home}/.config/rofi/launchers/type-3/launcher.sh"
