@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # install yay
+
+{{- if eq .chezmoi.osRelease.id "arch" }}
 sudo pacman -S --needed --noconfirm  git base-devel
 git clone https://aur.archlinux.org/yay.git /tmp/yay
 cd /tmp/yay
@@ -21,4 +23,5 @@ yay -S --noconfirm \
     extra/dconf extra/dconf-editor \
     python-psutil \
     khal
+{{- end }}
 
