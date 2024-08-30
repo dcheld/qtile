@@ -674,6 +674,10 @@ def start_once():
     home = os.path.expanduser('~')
     subprocess.Popen([home + '/.config/qtile/scripts/autostart.sh'])
 
+@hook.subscribe.resume
+def resume():
+    subprocess.Popen(['picom','-b'])
+
 dgroups_app_rules = []  # type: list
 dgroups_key_binder = None
 follow_mouse_focus = True
