@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# install yay
-
 {{- if eq .chezmoi.osRelease.id "arch" }}
+# install yay
 sudo pacman -S --needed --noconfirm  git base-devel
+
 git clone https://aur.archlinux.org/yay.git /tmp/yay
 cd /tmp/yay
 makepkg -si
@@ -11,17 +11,31 @@ cd -
 
 sudo pacman -R --noconfirm vim || true
 
-yay -Syy --noconfirm;
-
-yay -S --noconfirm \
+yay -Syy --noconfirm \
+    zsh doas \
     polkit rxvt-unicode xsensors \
     xss-lock xscreensaver redshift \
     nemo nemo-seahorse clipmenu volctl blueman-applet xfce4-power-manager rofi \
     podman podman-docker \
-    gvim ttf-meslo-nerd \
+    gvim ttf-meslo-nerd tmux \
     alsa-utils pavucontrol playerctl \
     extra/dconf extra/dconf-editor \
     python-psutil \
     khal
+
+{{- else if eq .chezmoi.osRelease.id "ubuntu" }}
+
+    sudo apt update
+    sudo apt-get upgrade -y
+    sudo apt install -y \
+        build-essential curl git \
+        tmux vim-gtk3 \
+        doas
+
 {{- end }}
 
+if [[ ! -f /etc/doas.conf ]]; then
+    echo "permit persist keepenv ${USER##*\\}" | sudo tee /etc/doas.conf
+    sudo chown -c root:root /etc/doas.conf
+    sudo chmod -c 0400 /etc/doas.conf
+fi

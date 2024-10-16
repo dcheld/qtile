@@ -1,8 +1,0 @@
-#!/bin/bash
-
-mkdir -p "$HOME/.dotfiles/locals/scripts"
-
-{{- if eq .chezmoi.osRelease.id "arch" }}
-# os-completions hash: {{ include "arch-completions.zsh" | sha256sum }}
-cp {{ joinPath .chezmoi.sourceDir "arch-completions.zsh" | quote }} "$HOME/.dotfiles/locals/scripts"
-{{- end }}
