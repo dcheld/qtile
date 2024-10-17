@@ -1,27 +1,31 @@
 #!/usr/bin/env bash
 
 {{- if eq .chezmoi.osRelease.id "arch" }}
-# install yay
-sudo pacman -S --needed --noconfirm  git base-devel
+    # install yay
+    sudo pacman -S --needed --noconfirm  git base-devel
 
-git clone https://aur.archlinux.org/yay.git /tmp/yay
-cd /tmp/yay
-makepkg -si
-cd -
+    if ! command -v yay &> /dev/null; then
+        git clone https://aur.archlinux.org/yay.git /tmp/yay
+        pushd /tmp/yay
+        makepkg -si
+        popd
+    fi
 
-sudo pacman -R --noconfirm vim || true
+    if pacman -Qq | grep -E "^vim$" &> /dev/null; then
+        sudo pacman -R --noconfirm vim || true
+    fi
 
-yay -Syy --noconfirm \
-    zsh doas \
-    polkit rxvt-unicode xsensors \
-    xss-lock xscreensaver redshift \
-    nemo nemo-seahorse clipmenu volctl blueman-applet xfce4-power-manager rofi \
-    podman podman-docker \
-    gvim ttf-meslo-nerd tmux \
-    alsa-utils pavucontrol playerctl \
-    extra/dconf extra/dconf-editor \
-    python-psutil \
-    khal
+    yay -Syy --noconfirm --needed \
+        zsh doas \
+        polkit rxvt-unicode xsensors \
+        xss-lock xscreensaver redshift \
+        nemo nemo-seahorse clipmenu volctl blueman-applet xfce4-power-manager rofi \
+        podman podman-docker \
+        gvim ttf-meslo-nerd tmux \
+        alsa-utils pavucontrol playerctl \
+        extra/dconf extra/dconf-editor \
+        python-psutil \
+        khal
 
 {{- else if eq .chezmoi.osRelease.id "ubuntu" }}
 
