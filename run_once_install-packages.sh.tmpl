@@ -19,13 +19,19 @@
         zsh doas \
         polkit rxvt-unicode xsensors \
         xss-lock xscreensaver redshift \
-        nemo nemo-seahorse clipmenu volctl blueman-applet xfce4-power-manager rofi \
+        gnome-keyring seahorse \
+        nemo nemo-seahorse clipmenu volctl blueman xfce4-power-manager rofi \
         podman podman-docker \
         gvim ttf-meslo-nerd tmux \
         alsa-utils pavucontrol playerctl \
         extra/dconf extra/dconf-editor \
         python-psutil \
         khal
+
+     systemctl --user enable --now ssh-agent
+     systemctl --user enable --now gnome-keyring-daemon
+     systemctl --user enable --now gcr-ssh-agent.socket
+
 
 {{- else if eq .chezmoi.osRelease.id "ubuntu" }}
 
