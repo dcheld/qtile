@@ -2,7 +2,6 @@
 {{- $fontSize := promptIntOnce . "fontSize" "Font size" 10 -}}
 {{- $fontFamily := promptStringOnce . "fontFamily" "Font famaly" "MesloLGM Nerd Font" -}}
 {{- $applyFontFamilyAlacritty := promptBoolOnce . "applyFontFamilyAlacritty" "Should it use Alacritty Nerd Fonts" -}}
-{{- $enableTmux := promptBoolOnce . "tmux.enable" "Enable tmux" true -}}
 
 [data]
     # General
@@ -11,6 +10,12 @@
     fontFamily = {{ $fontFamily| quote }}
     applyFontFamilyAlacritty = {{ $applyFontFamilyAlacritty }}
 
+    # gitconfig
+    {{ $gitSource := promptStringOnce . "git.source" "Git default repo path" "~/source/repos/gitconfig" -}}
+    [data.git]
+    source = {{ $gitSource | quote }}
+
     # Tmux
+    {{ $enableTmux := promptBoolOnce . "tmux.enable" "Enable tmux" true -}}
     [data.tmux]
     enable = {{ $enableTmux }}
