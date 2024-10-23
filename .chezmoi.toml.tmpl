@@ -1,11 +1,16 @@
 {{- $email := promptStringOnce . "email" "E-mail address" -}}
 {{- $fontSize := promptIntOnce . "fontSize" "Font size" 10 -}}
 {{- $fontFamily := promptStringOnce . "fontFamily" "Font famaly" "MesloLGM Nerd Font" -}}
-
-{{ $applyFontFamilyAlacritty := promptBoolOnce . "applyFontFamilyAlacritty" "Should it use Alacritty Nerd Fonts" }}
+{{- $applyFontFamilyAlacritty := promptBoolOnce . "applyFontFamilyAlacritty" "Should it use Alacritty Nerd Fonts" -}}
+{{- $enableTmux := promptBoolOnce . "tmux.enable" "Enable tmux" true -}}
 
 [data]
+    # General
     email = {{ $email | quote }}
     fontSize = {{ $fontSize }}
     fontFamily = {{ $fontFamily| quote }}
     applyFontFamilyAlacritty = {{ $applyFontFamilyAlacritty }}
+
+    # Tmux
+    [data.tmux]
+    enable = {{ $enableTmux }}

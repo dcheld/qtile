@@ -1,4 +1,4 @@
-{{- if lookPath "tmux" }}
+{{- if and (eq .tmux.enable true) (lookPath "tmux") }}
 [shell]
 program = "/usr/bin/env"
 args = ["tmux", "new-session", "-A", "-s", "main"]
