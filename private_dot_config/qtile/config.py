@@ -238,7 +238,7 @@ def window_to_previous_group(window, switch_group: bool = False):
 
 def window_to_group(window, step, switch_group: bool = False):
     current_index = window.qtile.groups.index(window.group)
-    next_index = (current_index + step) % len(window.qtile.groups)
+    next_index = (current_index + step) % (len(window.qtile.groups)-1)
     window.togroup(window.qtile.groups[next_index].name, switch_group=switch_group)
 
 keys.extend([
@@ -660,16 +660,15 @@ def init_widgets_screen2():
     widgets_screen2 = init_widgets_list()
     return widgets_screen2
 
-widgets_screen1 = init_widgets_screen1()
-widgets_screen2 = init_widgets_screen2()
-
 def init_screens():
     wallpaper = {
         "wallpaper": "~/Pictures/wallpapers/joe-yates-Cc4sToR2Oc0-unsplash.jpg",
         "wallpaper_mode": "stretch",
     }
-    return [Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen1(), size=30, opacity=0.8)),
-            Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen2(), size=30, opacity=0.8))]
+    return [
+        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen1(), size=30, opacity=0.8)),
+        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen2(), size=30, opacity=0.8)),
+    ]
 
 screens = init_screens()
 
