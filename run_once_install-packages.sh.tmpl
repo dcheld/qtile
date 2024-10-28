@@ -2,6 +2,7 @@
 
 {{- if eq .chezmoi.osRelease.id "arch" }}
     # install yay
+    sudo pacman -Syy
     sudo pacman -S --needed --noconfirm  git base-devel
 
     if ! command -v yay &> /dev/null; then
@@ -15,10 +16,10 @@
         sudo pacman -R --noconfirm vim || true
     fi
 
-    yay -Syy --noconfirm --needed \
+    yay -S --noconfirm --needed \
         zsh doas \
         polkit lxsession-gtk3 \
-        rxvt-unicode xsensors \
+        rxvt-unicode xsensors extra/xorg-xkill \
         xss-lock xscreensaver redshift \
         gnome-keyring seahorse \
         nemo nemo-seahorse clipmenu volctl blueman xfce4-power-manager rofi \
