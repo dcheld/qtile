@@ -75,5 +75,6 @@
   "eslint.codeActionsOnSave.rules": null,
   "editor.stickyScroll.enabled": false,
   "security.workspace.trust.untrustedFiles": "open",
-  "files.autoSave": "afterDelay"
+  "files.autoSave": "afterDelay",
+  "workbench.editor.splitInGroupLayout": "vertical"
 }

@@ -50,8 +50,9 @@ keys = [
 # Most of our keybindings are in sxhkd file - except these
 
 # Multimedia Control
-     Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media-play")),
      Key([mod], "F2", lazy.group['SPD'].dropdown_toggle("whatsapp")),
+     Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media-play")),
+     Key([mod], "F4", lazy.group['SPD'].dropdown_toggle("bitwarden")),
      Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
      Key([], "XF86AudioPause", lazy.spawn("playerctl play-pause")),
      Key([], "XF86AudioPrev", lazy.spawn("playerctl previous")),
@@ -277,6 +278,16 @@ def init_scratchpad():
                     # Media Play
                     DropDown("media-play",
                         musicPlayer,
+                        y = y_position,
+                        x = 0.15,
+                        height = 0.65,
+                        width = 0.7,
+                        on_focus_lost_hide = False,
+                        warp_pointer = warp_pointer),
+
+                    # Bitwarden
+                    DropDown("bitwarden",
+                        "bitwarden-desktop",
                         y = y_position,
                         x = 0.15,
                         height = 0.65,
