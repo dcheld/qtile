@@ -45,6 +45,20 @@ def toggle_minimize_all(qtile):
         if hasattr(win, "toggle_minimize"):
             win.toggle_minimize()
 
+
+@lazy.window.function
+def window_to_next_group(window, switch_group: bool = False):
+    window_to_group(window, 1, switch_group)
+
+@lazy.window.function
+def window_to_previous_group(window, switch_group: bool = False):
+    window_to_group(window, -1, switch_group)
+
+def window_to_group(window, step, switch_group: bool = False):
+    current_index = window.qtile.groups.index(window.group)
+    next_index = (current_index + step) % (len(window.qtile.groups)-1)
+    window.togroup(window.qtile.groups[next_index].name, switch_group=switch_group)
+
 keys = [
 
 # Most of our keybindings are in sxhkd file - except these
@@ -204,8 +218,18 @@ keys = [
     Key([mod, shift], "Left", lazy.layout.swap_left()),
     Key([mod, shift], "Right", lazy.layout.swap_right()),
 
+    # MOVE WINDOW TO NEXT SCREEN
+    Key([mod, alt], "Left", window_to_previous_group(switch_group=True)),
+    Key([mod, alt], "Right", window_to_next_group(switch_group=True)),
+
 # TOGGLE FLOATING LAYOUT
     Key([mod, ctrl], "Space", lazy.window.toggle_floating()),
+
+# WINDOW EFFECTS
+    Key([mod], "Equal", lazy.window.up_opacity()),
+    Key([mod, alt], "Equal", lazy.window.set_opacity(1)),
+    Key([mod], "Minus", lazy.window.down_opacity()),
+    Key([mod, alt], "Minus", lazy.window.set_opacity(0.1)),
 
 # SHUTDOWN_MENU
     KeyChord([mod], "s", [
@@ -228,26 +252,6 @@ keys = [
     Key([mod], "v", lazy.spawn(clipboard)),
 ]
 
-@lazy.window.function
-def window_to_next_group(window, switch_group: bool = False):
-    window_to_group(window, 1, switch_group)
-
-@lazy.window.function
-def window_to_previous_group(window, switch_group: bool = False):
-    window_to_group(window, -1, switch_group)
-
-def window_to_group(window, step, switch_group: bool = False):
-    current_index = window.qtile.groups.index(window.group)
-    next_index = (current_index + step) % (len(window.qtile.groups)-1)
-    window.togroup(window.qtile.groups[next_index].name, switch_group=switch_group)
-
-keys.extend([
-    # MOVE WINDOW TO NEXT SCREEN
-    Key([mod, alt], "Left", window_to_previous_group(switch_group=True)),
-    Key([mod, alt], "Right", window_to_next_group(switch_group=True)),
-
-])
-
 def init_scratchpad():
 
         # Configuration
@@ -255,25 +259,27 @@ def init_scratchpad():
         y_position =            0.005
         warp_pointer =            False
         on_focus_lost_hide =    True
-        opacity =                0.8
+        opacity =                1
 
         return [
             ScratchPad("SPD",
                 [
                     # Drop down terminal with tmux session
                     DropDown("terminal",
-                        terminal + f" -o window.opacity={opacity}",
+                        terminal + f" -o window.opacity=0.9",
                         y = y_position,
                         height = height,
                         on_focus_lost_hide = on_focus_lost_hide,
-                        warp_pointer = warp_pointer),
+                        warp_pointer = warp_pointer,
+                       opacity = opacity),
 
                     # Another terminal exclusively for qshell
                     DropDown("qshell",
-                        terminal + f" -o window.opacity={opacity} -e qtile shell",
+                        terminal + f" -o window.opacity=0.8 -e qtile shell",
                         y = y_position,
                         on_focus_lost_hide = on_focus_lost_hide,
-                        warp_pointer = warp_pointer,),
+                        warp_pointer = warp_pointer,
+                       opacity = opacity),
 
                     # Media Play
                     DropDown("media-play",
@@ -283,7 +289,8 @@ def init_scratchpad():
                         height = 0.65,
                         width = 0.7,
                         on_focus_lost_hide = False,
-                        warp_pointer = warp_pointer),
+                        warp_pointer = warp_pointer,
+                       opacity = opacity),
 
                     # Bitwarden
                     DropDown("bitwarden",
@@ -293,7 +300,8 @@ def init_scratchpad():
                         height = 0.65,
                         width = 0.7,
                         on_focus_lost_hide = False,
-                        warp_pointer = warp_pointer),
+                        warp_pointer = warp_pointer,
+                       opacity = opacity),
 
                     # Calendar
                     DropDown("calendar",
@@ -301,7 +309,8 @@ def init_scratchpad():
                         y = y_position,
                         x = 0.7,
                         width = 0.3,
-                        on_focus_lost_hide = False,),
+                        on_focus_lost_hide = False,
+                       opacity = opacity),
 
                     # WhatsApp
                     DropDown("whatsapp",
@@ -311,8 +320,9 @@ def init_scratchpad():
                         width = 0.7,
                         height = 0.7,
                         on_focus_lost_hide = on_focus_lost_hide,
-                        warp_pointer = warp_pointer,),
-                ]
+                        warp_pointer = warp_pointer,
+                       opacity = opacity),
+                ],
             ),
         ]
 
@@ -666,8 +676,8 @@ def init_screens():
         "wallpaper_mode": "stretch",
     }
     return [
-        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen1(), size=30, opacity=0.8)),
-        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen2(), size=30, opacity=0.8)),
+        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen1(), size=30,)),
+        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen2(), size=30,)),
     ]
 
 screens = init_screens()
