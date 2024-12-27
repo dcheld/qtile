@@ -67,7 +67,6 @@
   },
   "window.zoomLevel": 1,
   "workbench.startupEditor": "none",
-  "workbench.editor.enablePreview": false,
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

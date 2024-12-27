@@ -123,7 +123,7 @@ keys = [
 
 # QTILE LAYOUT KEYS
     Key([mod], "n", lazy.layout.reset()),
-    Key([mod], "space", lazy.next_layout()),
+    Key([mod, ctrl], "space", lazy.next_layout()),
 
 # CHANGE FOCUS
     Key([mod], "Up", lazy.layout.up()),
@@ -223,7 +223,7 @@ keys = [
     Key([mod, alt], "Right", window_to_next_group(switch_group=True)),
 
 # TOGGLE FLOATING LAYOUT
-    Key([mod, ctrl], "Space", lazy.window.toggle_floating()),
+    Key([mod], "Space", lazy.window.toggle_floating()),
 
 # WINDOW EFFECTS
     Key([mod], "Equal", lazy.window.up_opacity()),
@@ -707,6 +707,16 @@ floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
+        Match(wm_class='confirm'),
+        Match(wm_class='dialog'),
+        Match(wm_class='download'),
+        Match(wm_class='error'),
+        Match(wm_class='file_progress'),
+        Match(wm_class='notification'),
+        Match(wm_class='splash'),
+        Match(wm_class='toolbar'),
+        Match(wm_class='confirmreset'),
+        Match(wm_class='makebranch'),
         Match(wm_class="confirmreset"),  # gitk
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
@@ -719,6 +729,7 @@ floating_layout = layout.Floating(
         Match(title=sensors),  # Sensors
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        # Match(title='Bitwarden'),
     ]
 )
 auto_fullscreen = True
