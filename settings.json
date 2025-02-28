@@ -75,5 +75,6 @@
   "editor.stickyScroll.enabled": false,
   "security.workspace.trust.untrustedFiles": "open",
   "files.autoSave": "afterDelay",
-  "workbench.editor.splitInGroupLayout": "vertical"
+  "workbench.editor.splitInGroupLayout": "vertical",
+  "workbench.colorTheme": "Tokyo Night"
 }

@@ -43,7 +43,7 @@ disable = ["asdf", "containers"]
 # assume_yes = true
 
 # Do not ask to retry failed steps (default: false)
-# no_retry = true
+no_retry = true
 
 # Run inside tmux (default: false)
 # run_in_tmux = true
@@ -85,12 +85,24 @@ disable = ["asdf", "containers"]
 # Commands to run before anything
 [pre_commands]
 # "Emacs Snapshot" = "rm -rf ~/.emacs.d/elpa.bak && cp -rl ~/.emacs.d/elpa ~/.emacs.d/elpa.bak"
-
+{{- if (lookPath "flatpak") }}
+"Flatpak Remove Unused" = "flatpak remove --unused"
+{{ end -}}
 
 # Commands to run after anything
 [post_commands]
 # "Emacs Snapshot" = "rm -rf ~/.emacs.d/elpa.bak && cp -rl ~/.emacs.d/elpa ~/.emacs.d/elpa.bak"
+{{- if (lookPath "apt") }}
+"Apt autoclean/autoremove" = "sudo apt autoclean -y && sudo apt autoremove -y"
+{{ end -}}
 
+{{- if (lookPath "snap") }}
+"Snap Clean" = "snap-clean"
+{{ end -}}
+
+{{- if (lookPath "paccache") }}
+"Pacman remove old Versions"="paccache -vrk 2"
+{{ end -}}
 
 # Custom commands
 [commands]
