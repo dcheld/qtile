@@ -106,7 +106,7 @@ no_retry = true
 
 {{- if (lookPath "pacman") }}
 "Remove pacotes órfãos" = "~/.local/bin/pacman-clean-orphans"
-{{- end }}
+{{ end -}}
 
 # Custom commands
 [commands]
@@ -151,7 +151,7 @@ no_retry = true
 
 # For the BrewFormula step
 # Execute `brew autoremove` after the step.
-# autoremove = true
+autoremove = true
 
 # For the BrewFormula step
 # Upgrade formulae built from the HEAD branch; `brew upgrade --fetch-HEAD`

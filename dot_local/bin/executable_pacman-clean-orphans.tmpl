@@ -3,7 +3,7 @@
 {{- if (lookPath "pacman") }}
 packages=$(pacman -Qtdq)
 if [[ -n "$packages" ]]; then
-    pacman -Rns $packages
+    sudo pacman -Rns "$packages"
 else
     echo "Nenhum pacote órfão encontrado."
 fi
