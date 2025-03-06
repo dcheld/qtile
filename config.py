@@ -1,3 +1,4 @@
+import json
 import os
 import socket
 import subprocess
@@ -8,6 +9,10 @@ from libqtile.utils import guess_terminal
 from libqtile.extension import dmenu
 from libqtile.log_utils import logger
 from libqtile import extension
+
+from qtile_extras import widget
+from qtile_extras.widget.decorations import RectDecoration
+from qtile_extras.widget.decorations import PowerLineDecoration
 
 mod = "mod4"
 alt = "mod1"
@@ -369,6 +374,32 @@ for i in range(len(group_names)):
         # Key([mod], '', lazy.group[group.name].hide()),
     ])
 
+# COLORS FOR THE BAR
+#Theme name : ArcoLinux Default
+def init_colors():
+    return [["#2F343F", "#2F343F"], # color 0
+            ["#2F343F", "#2F343F"], # color 1
+            ["#c0c5ce", "#c0c5ce"], # color 2
+            ["#fba922", "#fba922"], # color 3
+            ["#3384d0", "#3384d0"], # color 4
+            ["#f3f4f5", "#f3f4f5"], # color 5
+            ["#cd1f3f", "#cd1f3f"], # color 6
+            ["#62FF00", "#62FF00"], # color 7
+            ["#6790eb", "#6790eb"], # color 8
+            ["#a9a9a9", "#a9a9a9"], # color 9
+            ["#0c0c0c", "#0c0c0c"], # color 10
+        ]
+
+def init_colors_json():
+    colors_file = os.path.expanduser('~/.cache/hellwal/colors.json')
+    with open(colors_file) as f:
+        colordict = json.load(f)
+        return [[colordict['colors'][f"color{i}"], colordict['colors'][f"color{i}"]] for i in range(len(colordict['colors']))]
+
+
+colors = init_colors()
+logger.warning(colors)
+
 def init_layout_theme():
     return {
                 "margin":2,
@@ -395,22 +426,32 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-# COLORS FOR THE BAR
-#Theme name : ArcoLinux Default
-def init_colors():
-    return [["#2F343F", "#2F343F"], # color 0
-            ["#2F343F", "#2F343F"], # color 1
-            ["#c0c5ce", "#c0c5ce"], # color 2
-            ["#fba922", "#fba922"], # color 3
-            ["#3384d0", "#3384d0"], # color 4
-            ["#f3f4f5", "#f3f4f5"], # color 5
-            ["#cd1f3f", "#cd1f3f"], # color 6
-            ["#62FF00", "#62FF00"], # color 7
-            ["#6790eb", "#6790eb"], # color 8
-            ["#a9a9a9", "#a9a9a9"]] # color 9
+# --------------------------------------------------------
+# Decorations
+# https://qtile-extras.readthedocs.io/en/stable/manual/how_to/decorations.html
+# --------------------------------------------------------
 
+decor_left = {
+    "decorations": [
+        PowerLineDecoration(
+            path="arrow_left"
+            # path="rounded_left"
+            # path="forward_slash"
+            # path="back_slash"
+        )
+    ],
+}
 
-colors = init_colors()
+decor_right = {
+    "decorations": [
+        PowerLineDecoration(
+            path="arrow_right"
+            # path="rounded_right"
+            # path="forward_slash"
+            # path="back_slash"
+        )
+    ],
+}
 
 # WIDGETS FOR THE BAR
 
@@ -425,243 +466,132 @@ def init_widgets_list():
     prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
     return [
             widget.Image(
-                    filename = "~/.icons/custom-download/archlinux-light.svg",
-                    margin_x = 5,
-                    background = colors[1],
-                    mouse_callbacks = {"Button1": lambda: qtile.spawn(applicationLaunch)}
-                    ),
-            widget.GroupBox(font="FontAwesome",
-                    fontsize = 14,
-                    highlight_method = "line",
-                    background = colors[1],
-                    inactive="#B2BEB5",
-                    highlight_color = ["#6790eb", "#120a8f",],
-                    padding=5,
-                    ),
-            widget.Sep(
-                    linewidth = 1,
-                    padding = 10,
-                    foreground = colors[2],
-                    background = colors[1],
-                    ),
-            # widget.CurrentLayout(
-            #         font = "Noto Sans Bold",
-            #         foreground = colors[5],
-            #         background = colors[1],
-            #         ),
+                **decor_left,
+                background=colors[9],
+                filename = "~/.icons/custom-download/archlinux-light.svg",
+                foreground='ffffff',
+                margin_x = 5,
+                mouse_callbacks = {"Button1": lambda: qtile.spawn(applicationLaunch)}
+            ),
+            widget.GroupBox(
+                **decor_left,
+                background = colors[1],
+                font="FontAwesome",
+                fontsize = 14,
+                highlight_method = "line",
+                inactive="#B2BEB5",
+                highlight_color = ["#6790eb", "#120a8f",],
+                padding=5,
+            ),
             widget.CurrentLayoutIcon(
-                    custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
-                    foreground=colors[1],
-                    background=colors[0],
-                    padding=0,
-                    scale=0.7),
-            widget.Sep(
-                    linewidth = 1,
-                    padding = 10,
-                    foreground = colors[2],
-                    background = colors[1],
-                    ),
+                **decor_left,
+                custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
+                background="000",
+                foreground=colors[0],
+                padding=10,
+                scale=0.7
+            ),
             widget.TaskList(
-                    font="FontAwesome",
-                    highlight_method="block",  # or border
-                    max_title_width=300,
-                    fontsize=14,
-                    border=colors[4],
-                    foreground=colors[5],
-                    txt_floating="🗗",
-                    txt_minimized=">_ ",
-                    borderwidth=5,
-                    background=colors[1],
-                    ),
-            # widget.WindowName(font="Noto Sans",
-            #         fontsize = 12,
-            #         foreground = colors[5],
-            #         background = colors[1],
-            #         ),
-            # widget.Sep(
-            #         linewidth = 1,
-            #         padding = 10,
-            #         foreground = colors[2],
-            #         background = colors[1],
-            #         ),
-            # widget.Net(
-            #         font="Noto Sans",
-            #         fontsize=12,
-            #         interface="wlp4s0",
-            #         foreground=colors[2],
-            #         background=colors[1],
-            #         padding = 0,),
-            # widget.NetGraph(
-            #          font="Noto Sans",
-            #          fontsize=12,
-            #          bandwidth="down",
-            #          interface="auto",
-            #          fill_color = colors[8],
-            #          foreground=colors[2],
-            #          background=colors[1],
-            #          graph_color = colors[8],
-            #          border_color = colors[2],
-            #          padding = 0,
-            #          border_width = 1,
-            #          line_width = 1,
-            #          ),
-            # widget.Chord(
-            #          foreground = colors[2],
-            #          background = colors[1],
-            #          linewidth = 1,
-            #          padding = 10,
-            #          chords_colors={'vim mode': ('2980b9', 'ffffff')},
-                     # name_transform=lambda name: name.upper(),
-            # ),
-            widget.Sep(
-                     linewidth = 1,
-                     padding = 10,
-                     foreground = colors[2],
-                     background = colors[1],
-                     ),
-            # do not activate in Virtualbox - will break qtile
+                **decor_right,
+                background=colors[1],
+                foreground=colors[5],
+                font="FontAwesome",
+                highlight_method="block",  # or border
+                max_title_width=300,
+                fontsize=14,
+                border=colors[4],
+                txt_floating=" ",
+                txt_minimized=">_ ",
+                borderwidth=5,
+            ), 
             widget.ThermalSensor(
-                     foreground = colors[7],
-                     foreground_alert = colors[6],
-                     background = colors[1],
-                     metric = True,
-                     padding = 3,
-                     threshold = 80,
-                     font="FontAwesome",
-                     fontsize=14,
-                     format=' {temp:.0f}{unit}',
-                     tag_sensor = "Package id 0",
-                     mouse_callbacks={"Button1": lambda: qtile.spawn(console_launcher(sensors))},
-                     ),
-            # battery option 1  ArcoLinux Horizontal icons do not forget to import arcobattery at the top
-            widget.Sep(
-                     linewidth = 1,
-                     padding = 10,
-                     foreground = colors[2],
-                     background = colors[1],
-                     ),
-            # arcobattery.BatteryIcon(
-            #          padding=0,
-            #          scale=0.7,
-            #          y_poss=2,
-            #          theme_path=home + "/.config/qtile/icons/battery_icons_horiz",
-            #          update_interval = 5,
-            #          background = colors[1]
-            #          ),
-            # # battery option 2  from Qtile
-            # widget.Sep(
-            #          linewidth = 1,
-            #          padding = 10,
-            #          foreground = colors[2],
-            #          background = colors[1]
-            #          ),
-            # widget.Battery(
-            #          font="Noto Sans",
-            #          update_interval = 10,
-            #          fontsize = 12,
-            #          foreground = colors[5],
-            #          background = colors[1],
-            #          ),
+                **decor_right,
+                background = colors[9],
+                foreground = colors[1],
+                foreground_alert = colors[6],
+                metric = True,
+                padding = 5,
+                threshold = 80,
+                font="FontAwesome",
+                fontsize=14,
+                format=' {temp:.0f}{unit}',
+                tag_sensor = "Package id 0",
+                mouse_callbacks={"Button1": lambda: qtile.spawn(console_launcher(sensors))},
+            ),
             widget.TextBox(
-                     font="FontAwesome",
-                     text="  ",
-                     foreground=colors[6],
-                     background=colors[1],
-                     padding = 0,
-                     fontsize=16,
-                     ),
+                **decor_right,
+                background = colors[1],
+                foreground=colors[6],
+                font="FontAwesome",
+                text=" ",
+                padding = 0,
+                fontsize=16,
+            ),
             widget.CPUGraph(
-                     border_color = colors[2],
-                     fill_color = colors[8],
-                     graph_color = colors[8],
-                     background=colors[1],
-                     border_width = 1,
-                     line_width = 1,
-                     core = "all",
-                     type = "box"
-                     ),
-            widget.Sep(
-                     linewidth = 1,
-                     padding = 10,
-                     foreground = colors[2],
-                     background = colors[1]
-                     ),
-            # widget.Bluetooth(
-            #          font="FontAwesome",
-            #          hci0="/dev_41_42_5C_BB_D6_5C",
-            #          background=colors[0],
-            #          foreground=colors[1],
-            #          fontsize=14,),
-            # widget.Sep(
-            #          linewidth = 1,
-            #          padding = 10,
-            #          foreground = colors[2],
-            #          background = colors[1],
-            #          ),
+                **decor_right,
+                background=colors[1],
+                foreground=colors[6],
+                border_color = colors[2],
+                fill_color = colors[8],
+                graph_color = colors[8],
+                border_width = 1,
+                line_width = 1,
+                core = "all",
+                type = "box"
+            ),
             widget.TextBox(
-                     font="FontAwesome",
-                     text="  ",
-                     foreground=colors[4],
-                     background=colors[1],
-                     padding = 0,
-                     fontsize=16,
-                     ),
+                background=colors[2],
+                foreground=colors[4],
+                font="FontAwesome",
+                text="  ",
+                padding = 0,
+                fontsize=16,
+            ),
             widget.MemoryGraph(
-                     background = colors[1],
-                    ),
-            widget.Sep(
-                     linewidth = 1,
-                     padding = 10,
-                     foreground = colors[2],
-                     background = colors[1],
-                     ),
+                **decor_right,
+                background = colors[2],
+                foreground=colors[4],
+                border_color = colors[1],
+                border_width = 1,
+            ),
             widget.TextBox(
-                     # font="FontAwesome",
-                     text="  ",
-                     foreground=colors[5],
-                     background=colors[1],
-                     padding = 0,
-                     fontsize=16,
-                     mouse_callbacks={"Button1": lambda: qtile.spawn(clipboard)},
-                     ),
-            widget.Sep(
-                     linewidth = 1,
-                     padding = 10,
-                     foreground = colors[2],
-                     background = colors[1],
-                     ),
+                **decor_right,
+                background=colors[10],
+                foreground=colors[5],
+                font="FontAwesome",
+                text="  ",
+                padding = 0,
+                fontsize=16,
+                mouse_callbacks={"Button1": lambda: qtile.spawn(clipboard)},
+            ),
             widget.Systray(
+                **decor_right,
                 background=colors[1],
                 icon_size=20,
-                padding = 4,
-                ),
-            widget.Sep(
-                     linewidth = 1,
-                     padding = 10,
-                     foreground = colors[2],
-                     background = colors[1],
-                     ),
+                padding=5,
+            ),
             widget.TextBox(
-                     font="FontAwesome",
-                     text="  ",
-                     foreground=colors[3],
-                     background=colors[1],
-                     padding = 0,
-                     fontsize=16,
-                     mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'calendar'")}
-                     ),
+                background=colors[2],
+                foreground=colors[10],
+                font="FontAwesome",
+                text="  ",
+                padding = 0,
+                fontsize=16,
+                mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'calendar'")}
+            ),
             widget.Clock(
-                     foreground = colors[5],
-                     background = colors[1],
-                     fontsize = 14,
-                     format="%d/%m/%Y %H:%M",
-                     ),
+                **decor_right,
+                background=colors[2],
+                foreground=colors[10],
+                fontsize=14,
+                format="%d/%m/%Y %H:%M",
+            ),
             widget.TextBox(
                      text = "⏻",
                      background = colors[4],
                      foreground = colors[6],
-                     fontsize = 17,
-                     padding = 17,
+                     fontsize = 18,
+                     padding = 10,
                      mouse_callbacks={"Button1": lambda: qtile.spawn(rofi_power_menu_cmd)},
                      ),
             # widget.QuickExit(),
@@ -681,8 +611,13 @@ def init_screens():
         "wallpaper_mode": "stretch",
     }
     return [
-        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen1(), size=30,)),
-        Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen2(), size=30,)),
+        Screen(**wallpaper, 
+               top=bar.Bar(
+                   widgets=init_widgets_screen1(),
+                   size=30,
+                   opacity= .95,
+                   background = "#fff")),
+        #Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen2(), size=30, opacity= .9)),
     ]
 
 screens = init_screens()
