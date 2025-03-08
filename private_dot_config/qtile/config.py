@@ -23,6 +23,7 @@ elif qtile.core.name == "wayland":
 terminal = guess_terminal()
 rofi_power_menu_cmd = f"{home}/.config/rofi/applets/bin/powermenu.sh"
 applicationLaunch = f"{home}/.config/rofi/launchers/type-3/launcher.sh"
+applicationQuickLaunch = f"{home}/.config/rofi/launchers/type-2/launcher.sh"
 calendar = 'khal interactive'
 fileManager = "nemo"
 processManager = "gnome-system-monitor"
@@ -31,9 +32,9 @@ musicPlayer = """google-chrome-stable --app="http://music.youtube.com/" --class=
 # browser = "google-chrome-stable"
 browser = "google-chrome-stable"
 sensors = "watch -n 1 sensors"
-ide = "code"
+ide = "code" 
 screenshot = "flameshot gui"
-clipboard = "clipmenu"
+clipboard = "clipcat-menu"
 whats_app_launch="""google-chrome-stable --app="https://web.whatsapp.com/" --class=WebApp-WhatsApp3698 --user-data-dir=/home/dcheld/.local/share/ice/profiles/WhatsApp3698"""
 
 def console_launcher(app):
@@ -92,6 +93,7 @@ keys = [
 
 #Rofi
     Key([mod], "r", lazy.spawn(applicationLaunch), desc = "Launch primary launcher"),
+    Key([alt], "f2", lazy.spawn(applicationQuickLaunch), desc = "Quick launcher"),
 
 # SUPER + FUNCTION KEYS
 
@@ -250,6 +252,7 @@ keys = [
 
 # Clipboard
     Key([mod], "v", lazy.spawn(clipboard)),
+    Key([mod, alt], "v", lazy.spawn(f"clipcatctl clear")),
 ]
 
 def init_scratchpad():

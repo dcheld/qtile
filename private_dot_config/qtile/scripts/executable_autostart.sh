@@ -20,5 +20,6 @@ run xfce4-power-manager &
 run redshift &
 run xss-lock --ignore-sleep -- xscreensaver-command -lock &
 run xscreensaver --no-splash &
-run clipmenud &
+# run clipmenud &
+run clipcatd &
 run /usr/bin/lxpolkit &
