@@ -1,9 +1,7 @@
-#!/usr/bin/env bash
-
 {{- if (lookPath "pacman") }}
-packages=$(pacman -Qtdq)
-if [[ -n "$packages" ]]; then
-    sudo pacman -Rns "$packages"
+packages=($(pacman -Qtdq))
+if [[ ${#packages[@]} -gt 0 ]]; then
+    sudo pacman -Rns "${packages[@]}"
 else
     echo "Nenhum pacote órfão encontrado."
 fi
