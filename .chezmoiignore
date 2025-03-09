@@ -1,2 +1,20 @@
 settings.json
 .zprofile
+
+{{ if not (lookPath "qtile") -}}
+.config/qtile
+.icons/custom-download
+{{- end }}
+
+{{ if not (lookPath "khal") -}}
+.config/khal
+{{- end }}
+
+{{ if not (lookPath "alacritty") -}}
+.config/alacritty
+{{- end }}
+
+{{ if not (lookPath "tmux") -}}
+.config/tmux-powerline
+.tmux.conf
+{{- end }}
