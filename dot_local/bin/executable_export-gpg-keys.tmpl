@@ -78,7 +78,7 @@ cleanup() {
     local removidos=()
     local erro_arquivos=()
 
-    for file in "$PRIVATE_KEY_FILE" "$PUBLIC_KEY_FILE"; do
+    for file in "$PRIVATE_KEY_FILE" "$PUBLIC_KEY_FILE" "$REVOCATION_FILE"; do
         if [[ -f "$file" ]]; then
             if shred -u "$file"; then
                 removidos+=("$file")
