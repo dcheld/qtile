@@ -274,7 +274,7 @@ def init_scratchpad():
                         height = height,
                         on_focus_lost_hide = on_focus_lost_hide,
                         warp_pointer = warp_pointer,
-                       opacity = opacity),
+                        opacity = opacity),
 
                     # Another terminal exclusively for qshell
                     DropDown("qshell",
@@ -282,7 +282,7 @@ def init_scratchpad():
                         y = y_position,
                         on_focus_lost_hide = on_focus_lost_hide,
                         warp_pointer = warp_pointer,
-                       opacity = opacity),
+                        opacity = opacity),
 
                     # Media Play
                     DropDown("media-play",
@@ -293,18 +293,19 @@ def init_scratchpad():
                         width = 0.7,
                         on_focus_lost_hide = False,
                         warp_pointer = warp_pointer,
-                       opacity = opacity),
+                        opacity = opacity),
 
                     # Bitwarden
                     DropDown("bitwarden",
-                        "bitwarden-desktop",
+                        "flatpak run com.bitwarden.desktop",
+                        match = Match(title="Bitwarden"),
                         y = y_position,
                         x = 0.15,
                         height = 0.65,
                         width = 0.7,
                         on_focus_lost_hide = False,
                         warp_pointer = warp_pointer,
-                       opacity = opacity),
+                        opacity = opacity),
 
                     # Calendar
                     DropDown("calendar",
@@ -313,7 +314,7 @@ def init_scratchpad():
                         x = 0.7,
                         width = 0.3,
                         on_focus_lost_hide = False,
-                       opacity = opacity),
+                        opacity = opacity),
 
                     # WhatsApp
                     DropDown("whatsapp",
@@ -324,7 +325,7 @@ def init_scratchpad():
                         height = 0.7,
                         on_focus_lost_hide = on_focus_lost_hide,
                         warp_pointer = warp_pointer,
-                       opacity = opacity),
+                        opacity = opacity),
                 ],
             ),
         ]

@@ -1,0 +1,108 @@
+{{- if .gpg.keyId -}}
+#!/bin/bash
+
+set -euo pipefail
+
+# Verificar se a chave GPG está configurada
+if [[ -z "{{ .gpg.keyId }}" ]]; then
+    echo "❌ A chave GPG não foi configurada corretamente. O script não pode continuar."
+    exit 1
+fi
+
+# IDs configurados via Chezmoi
+GPG_KEY_ID="{{ .gpg.keyId }}"
+KEY_NAME="{{ .gpg.keyName }}"
+BW_SECRET_ID="{{ .bw.gpgItemid }}"
+
+# Arquivos temporários
+PRIVATE_KEY_FILE="/tmp/${KEY_NAME}-private-key.asc"
+PUBLIC_KEY_FILE="/tmp/${KEY_NAME}-public-key.asc"
+REVOCATION_FILE="/tmp/${KEY_NAME}-revocation-cert.asc"
+
+# Definir trap para sempre executar cleanup ao sair do script
+trap cleanup EXIT
+
+# Função para verificar dependências
+check_dependencies() {
+    local missing_packages=()
+    local missing_bw=true  # Assume que o Bitwarden está ausente
+
+    for cmd in gpg shred; do
+        if ! command -v "$cmd" &>/dev/null; then
+            missing_packages+=("$cmd")
+        fi
+    done
+
+    # Verifica Bitwarden separadamente (snap não adiciona ao PATH global)
+    if command -v bw &>/dev/null || snap list | grep -q "^bw "; then
+        missing_bw=false
+    fi
+
+    if [[ $missing_bw == true ]]; then
+        missing_packages+=("bw (Bitwarden CLI)")
+    fi
+
+    if [[ ${#missing_packages[@]} -gt 0 ]]; then
+        echo "❌ Dependências ausentes: ${missing_packages[*]}"
+        exit 1
+    fi
+}
+
+# Função para exportar chaves
+export_gpg_keys() {
+    echo "🔑 Exportando chave privada..."
+    gpg --export-secret-keys --armor "$GPG_KEY_ID" > "$PRIVATE_KEY_FILE"
+
+    echo "🔓 Exportando chave pública..."
+    gpg --export --armor "$GPG_KEY_ID" > "$PUBLIC_KEY_FILE"
+
+    echo "❌ Criando certificado de revogação..."
+    gpg --gen-revoke "$GPG_KEY_ID" > "$REVOCATION_FILE"
+}
+
+# Função para enviar ao Bitwarden
+upload_to_bitwarden() {
+    echo "🔓 Desbloqueando Bitwarden..."
+    BW_SESSION=$(bw unlock --raw)
+    export BW_SESSION
+
+    for file in "$PRIVATE_KEY_FILE" "$PUBLIC_KEY_FILE" "$REVOCATION_FILE"; do
+        echo "☁️ Enviando $file para o Bitwarden..."
+        bw create attachment --file "$file" --itemid "$BW_SECRET_ID" --session "$BW_SESSION"
+    done
+}
+
+# Função de limpeza (será sempre chamada pelo trap)
+cleanup() {
+    echo "🗑️ Limpando arquivos temporários..."
+    local removidos=()
+    local erro_arquivos=()
+
+    for file in "$PRIVATE_KEY_FILE" "$PUBLIC_KEY_FILE"; do
+        if [[ -f "$file" ]]; then
+            if shred -u "$file"; then
+                removidos+=("$file")
+            else
+                erro_arquivos+=("$file")
+            fi
+        fi
+    done
+
+    if [[ ${#removidos[@]} -gt 0 ]]; then
+        echo "✅ Arquivos removidos com sucesso:"
+        printf '  - %s\n' "${removidos[@]}"
+    fi
+
+    if [[ ${#erro_arquivos[@]} -gt 0 ]]; then
+        echo "⚠️ Não foi possível remover os seguintes arquivos:"
+        printf '  - %s\n' "${erro_arquivos[@]}"
+    fi
+}
+
+# Execução do script
+check_dependencies
+export_gpg_keys
+upload_to_bitwarden
+
+echo "✅ Chaves GPG exportadas e enviadas ao Bitwarden com sucesso!"
+{{- end }}

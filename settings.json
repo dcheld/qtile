@@ -76,5 +76,6 @@
   "security.workspace.trust.untrustedFiles": "open",
   "files.autoSave": "afterDelay",
   "workbench.editor.splitInGroupLayout": "vertical",
-  "workbench.colorTheme": "Tokyo Night"
+  "workbench.colorTheme": "Tokyo Night",
+  "diffEditor.renderSideBySide": true
 }
