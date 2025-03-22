@@ -289,6 +289,17 @@ def init_scratchpad():
                         warp_pointer = warp_pointer,
                         opacity = opacity),
 
+                        # Another terminal exclusively for qshell
+                    DropDown("sensors",
+                        console_launcher(sensors),
+                        y = y_position,
+                        x = 0.6,
+                        height = 0.85,
+                        width = 0.4,
+                        on_focus_lost_hide = False,
+                        warp_pointer = warp_pointer,
+                        opacity = opacity),
+
                     # Media Play
                     DropDown("media-play",
                         musicPlayer,
@@ -398,7 +409,6 @@ def init_colors_json():
 
 
 colors = init_colors()
-logger.warning(colors)
 
 def init_layout_theme():
     return {
@@ -516,7 +526,7 @@ def init_widgets_list():
                 fontsize=14,
                 format=' {temp:.0f}{unit}',
                 tag_sensor = "Package id 0",
-                mouse_callbacks={"Button1": lambda: qtile.spawn(console_launcher(sensors))},
+                mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'sensors'")},
             ),
             widget.TextBox(
                 **decor_right,
@@ -666,7 +676,6 @@ floating_layout = layout.Floating(
         Match(wm_class="gnome-calendar"),  # Calendar
         Match(wm_class="kcalc"),  # Calendar
         Match(wm_class=processManager),  # Calendar
-        Match(title=sensors),  # Sensors
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         # Match(title='Bitwarden'),
