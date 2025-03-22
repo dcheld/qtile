@@ -297,8 +297,9 @@ def init_scratchpad():
 
                     # Bitwarden
                     DropDown("bitwarden",
-                        "flatpak run com.bitwarden.desktop",
-                        match = Match(title="Bitwarden"),
+                        # "flatpak run com.bitwarden.desktop",
+                        # match = Match(title="Bitwarden"),
+                        "bitwarden-desktop",
                         y = y_position,
                         x = 0.15,
                         height = 0.65,
