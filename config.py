@@ -597,13 +597,14 @@ def init_widgets_list():
                 format="%d/%m/%Y %H:%M",
             ),
             widget.TextBox(
-                     text = "⏻",
-                     background = colors[4],
-                     foreground = colors[6],
-                     fontsize = 18,
-                     padding = 10,
-                     mouse_callbacks={"Button1": lambda: qtile.spawn(rofi_power_menu_cmd)},
-                     ),
+                font="FontAwesome",
+                text = "⏻",
+                background = colors[4],
+                foreground = colors[6],
+                fontsize = 25,
+                padding = 10,
+                mouse_callbacks={"Button1": lambda: qtile.spawn(rofi_power_menu_cmd)},
+             ),
             # widget.QuickExit(),
     ]
 
