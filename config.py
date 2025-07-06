@@ -33,7 +33,8 @@ calendar = 'khal interactive'
 fileManager = "nemo"
 processManager = "gnome-system-monitor"
 # musicPlayer = "flatpak run com.spotify.Client"
-musicPlayer = """google-chrome-stable --app="http://music.youtube.com/" --class=WebApp-YT7567 --name=WebApp-YT7567 --user-data-dir=/home/dcheld/.local/share/ice/profiles/YT7567"""
+# musicPlayer = """google-chrome-stable --app="http://music.youtube.com/" --class=WebApp-YT7567 --name=WebApp-YT7567 --user-data-dir=/home/dcheld/.local/share/ice/profiles/YT7567"""
+musicPlayer = "youtube-music"
 # browser = "google-chrome-stable"
 browser = "google-chrome-stable"
 sensors = "watch -n 1 sensors"
@@ -680,6 +681,7 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         # Match(title='Bitwarden'),
+        Match(role="pop-up"),
     ]
 )
 auto_fullscreen = True
