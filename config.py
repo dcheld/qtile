@@ -147,8 +147,8 @@ keys = [
     Key([alt], "Tab", lazy.layout.next()),
     Key([alt, shift ], "Tab", lazy.layout.previous()),
 
-    Key([alt, ctrl], "Tab", lazy.group.next_window()),
-    Key([alt, ctrl, shift], "Tab", lazy.group.prev_window()),
+    Key([alt, ctrl], "Tab", lazy.group.next_window(), lazy.window.bring_to_front()),
+    Key([alt, ctrl, shift], "Tab", lazy.group.prev_window(), lazy.window.bring_to_front()),
 
 #CHANGE SCREEMS
     Key([mod], "Tab", lazy.screen.next_group(skip_empty = True)),
@@ -677,6 +677,7 @@ floating_layout = layout.Floating(
         Match(wm_class="gnome-calculator"),  # Calculator
         Match(wm_class="gnome-calendar"),  # Calendar
         Match(wm_class="kcalc"),  # Calendar
+        Match(wm_class="Emulator"),  # Android Emulator
         Match(wm_class=processManager),  # Calendar
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
