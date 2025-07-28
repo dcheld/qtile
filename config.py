@@ -132,6 +132,7 @@ keys = [
 # QTILE LAYOUT KEYS
     Key([mod], "n", lazy.layout.reset()),
     Key([mod, ctrl], "space", lazy.next_layout()),
+    Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
 
 # CHANGE FOCUS
     Key([mod], "Up", lazy.layout.up()),
@@ -231,7 +232,7 @@ keys = [
     Key([mod, alt], "Right", window_to_next_group(switch_group=True)),
 
 # TOGGLE FLOATING LAYOUT
-    Key([mod], "Space", lazy.window.toggle_floating()),
+    Key([mod, alt], "Space", lazy.window.toggle_floating()),
 
 # WINDOW EFFECTS
     Key([mod], "Equal", lazy.window.up_opacity()),
@@ -564,6 +565,13 @@ def init_widgets_list():
                 foreground=colors[4],
                 border_color = colors[1],
                 border_width = 1,
+            ),
+            widget.KeyboardLayout(
+                **decor_right,
+                background=colors[1],
+                foreground=colors[5],
+                font="FontAwesome",
+                configured_keyboards = ['us', 'us intl'],
             ),
             widget.TextBox(
                 **decor_right,
