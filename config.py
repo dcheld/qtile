@@ -21,11 +21,11 @@ shift = "shift"
 home = os.path.expanduser('~')
 
 if qtile.core.name == "x11":
-    term = "urxvt"
+    term = "urxvt -e"
 elif qtile.core.name == "wayland":
     term = "foot"
 
-terminal = guess_terminal()
+terminal = "alacritty"
 rofi_power_menu_cmd = f"{home}/.config/rofi/applets/bin/powermenu.sh"
 applicationLaunch = f"{home}/.config/rofi/launchers/type-3/launcher.sh"
 applicationQuickLaunch = f"{home}/.config/rofi/launchers/type-2/launcher.sh"
@@ -42,9 +42,11 @@ ide = "code"
 screenshot = "flameshot gui"
 clipboard = "clipcat-menu"
 whats_app_launch="""google-chrome-stable --app="https://web.whatsapp.com/" --class=WebApp-WhatsApp3698 --user-data-dir=/home/dcheld/.local/share/ice/profiles/WhatsApp3698"""
+volume_up="amixer set Master 1%+ unmute"
+volume_down="amixer set Master 2%- unmute"
 
 def console_launcher(app):
-    return f"urxvt -e {app}"
+    return f"{term} {app}"
 
 @lazy.function
 def toggle_minimize_all(qtile):
@@ -80,8 +82,11 @@ keys = [
      Key([], "XF86AudioNext", lazy.spawn("playerctl next")),
 
 # Volume Control
-     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set Master 1%+ unmute")),
-     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 2%- unmute")),
+     Key([], "XF86AudioRaiseVolume", lazy.spawn(volume_up)),
+     Key([], "XF86AudioLowerVolume", lazy.spawn(volume_down)),
+     Key([mod], "Backspace", lazy.spawn("amixer set Master toggle")),
+     Key([mod], "Equal", lazy.spawn(volume_up)),
+     Key([mod], "Minus", lazy.spawn(volume_down)),
      Key([], "XF86AudioMute", lazy.spawn("amixer set Master toggle")),
 
 # Microphone Mute
@@ -235,10 +240,11 @@ keys = [
     Key([mod, alt], "Space", lazy.window.toggle_floating()),
 
 # WINDOW EFFECTS
-    Key([mod], "Equal", lazy.window.up_opacity()),
-    Key([mod, alt], "Equal", lazy.window.set_opacity(1)),
-    Key([mod], "Minus", lazy.window.down_opacity()),
-    Key([mod, alt], "Minus", lazy.window.set_opacity(0.1)),
+    Key([mod, ctrl, alt], "Up", lazy.window.set_opacity(1)),
+    Key([mod, alt], "Up", lazy.window.up_opacity()),
+
+    Key([mod, alt], "Down", lazy.window.down_opacity()),
+    Key([mod, ctrl, alt], "Down", lazy.window.set_opacity(0.1)),
 
 # SHUTDOWN_MENU
     KeyChord([mod], "s", [
@@ -589,6 +595,12 @@ def init_widgets_list():
                 icon_size=20,
                 padding=5,
             ),
+            # widget.StatusNotifier(
+            #     **decor_right,
+            #     background=colors[1],
+            #     icon_size=20,
+            #     padding=5,
+            # ),
             widget.TextBox(
                 background=colors[2],
                 foreground=colors[10],
