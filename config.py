@@ -33,7 +33,7 @@ calendar = 'khal interactive'
 fileManager = "nemo"
 processManager = "gnome-system-monitor"
 # musicPlayer = "flatpak run com.spotify.Client"
-# musicPlayer = """google-chrome-stable --app="http://music.youtube.com/" --class=WebApp-YT7567 --name=WebApp-YT7567 --user-data-dir=/home/dcheld/.local/share/ice/profiles/YT7567"""
+# musicPlayer = f"""google-chrome-stable --app="http://music.youtube.com/" --class=WebApp-YT7567 --name=WebApp-YT7567 --user-data-dir={home}/.local/share/ice/profiles/YoutubeMusic"""
 musicPlayer = "youtube-music"
 # browser = "google-chrome-stable"
 browser = "google-chrome-stable"
@@ -41,7 +41,9 @@ sensors = "watch -n 1 sensors"
 ide = "code" 
 screenshot = "flameshot gui"
 clipboard = "clipcat-menu"
-whats_app_launch="""google-chrome-stable --app="https://web.whatsapp.com/" --class=WebApp-WhatsApp3698 --user-data-dir=/home/dcheld/.local/share/ice/profiles/WhatsApp3698"""
+whats_app_launch = f"""google-chrome-stable --app="https://web.whatsapp.com/" --class=WebApp-WhatsApp3698 --user-data-dir={home}/.local/share/ice/profiles/WhatsApp"""
+# llm_app_launch = f"""google-chrome-stable --app="https://gemini.google.com/app" --class=WebApp-httpschatgptcomcabafdbbaee3102 --name=Gemini --user-data-dir={home}/.local/share/ice/profiles/Gemini"""
+llm_app_launch = f"""google-chrome-stable --app="https://chatgpt.com/" --class=WebApp-httpschatgptcomcabafdbbaee3102 --name=ChatGPT --user-data-dir={home}/.local/share/ice/profiles/ChatGPT"""
 volume_up="amixer set Master 1%+ unmute"
 volume_down="amixer set Master 2%- unmute"
 
@@ -63,19 +65,38 @@ def window_to_next_group(window, switch_group: bool = False):
 def window_to_previous_group(window, switch_group: bool = False):
     window_to_group(window, -1, switch_group)
 
+@lazy.function
+def toggle_focus_hide(qtile):
+    sp = qtile.groups_map["SPD"]
+    win = qtile.current_window
+
+    # Compare current window against dropdown windows
+    for dd in sp.dropdowns.values():
+        if dd.window and dd.window == win:
+            dd.on_focus_lost_hide = not dd.on_focus_lost_hide
+            qtile.cmd_spawn(
+                f"notify-send 'ScratchPad' '{dd.name}: on_focus_lost_hide = {dd.on_focus_lost_hide}'"
+            )
+            return
+
+    qtile.cmd_spawn("notify-send 'ScratchPad' 'No active dropdown window found'")
+
 def window_to_group(window, step, switch_group: bool = False):
     current_index = window.qtile.groups.index(window.group)
     next_index = (current_index + step) % (len(window.qtile.groups)-1)
     window.togroup(window.qtile.groups[next_index].name, switch_group=switch_group)
+
 
 keys = [
 
 # Most of our keybindings are in sxhkd file - except these
 
 # Multimedia Control
+     Key([mod], "F1", toggle_focus_hide),
      Key([mod], "F2", lazy.group['SPD'].dropdown_toggle("whatsapp")),
      Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media-play")),
      Key([mod], "F4", lazy.group['SPD'].dropdown_toggle("bitwarden")),
+     Key([mod], "F5", lazy.group['SPD'].dropdown_toggle("llm_app_launch")),
      Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
      Key([], "XF86AudioPause", lazy.spawn("playerctl play-pause")),
      Key([], "XF86AudioPrev", lazy.spawn("playerctl previous")),
@@ -315,7 +336,6 @@ def init_scratchpad():
                         x = 0.15,
                         height = 0.65,
                         width = 0.7,
-                        on_focus_lost_hide = False,
                         warp_pointer = warp_pointer,
                         opacity = opacity),
 
@@ -328,7 +348,16 @@ def init_scratchpad():
                         x = 0.15,
                         height = 0.65,
                         width = 0.7,
-                        on_focus_lost_hide = False,
+                        warp_pointer = warp_pointer,
+                        opacity = opacity),
+
+                    # Gemini
+                    DropDown("llm_app_launch",
+                        llm_app_launch,
+                        y = y_position,
+                        x = 0.15,
+                        height = 0.7,
+                        width = 0.7,
                         warp_pointer = warp_pointer,
                         opacity = opacity),
 
@@ -517,10 +546,11 @@ def init_widgets_list():
                 highlight_method="block",  # or border
                 max_title_width=300,
                 fontsize=14,
+                borderwidth=2,
                 border=colors[4],
-                txt_floating=" ",
-                txt_minimized=">_ ",
-                borderwidth=5,
+                txt_floating="🗗 ",
+                txt_maximized="🗖 ",
+                txt_minimized="🗕 ",
             ), 
             widget.ThermalSensor(
                 **decor_right,
@@ -595,12 +625,6 @@ def init_widgets_list():
                 icon_size=20,
                 padding=5,
             ),
-            # widget.StatusNotifier(
-            #     **decor_right,
-            #     background=colors[1],
-            #     icon_size=20,
-            #     padding=5,
-            # ),
             widget.TextBox(
                 background=colors[2],
                 foreground=colors[10],
@@ -702,7 +726,7 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         # Match(title='Bitwarden'),
-        Match(role="pop-up"),
+        # Match(role="pop-up"),
     ]
 )
 auto_fullscreen = True
