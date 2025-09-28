@@ -1,17 +1,17 @@
 import json
 import os
-import socket
+# import socket
 import subprocess
-from libqtile import bar, layout, hook, qtile, widget
+from libqtile import bar, layout, hook, qtile
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, KeyChord, ScratchPad, DropDown
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
-from libqtile.extension import dmenu
-from libqtile.log_utils import logger
+# from libqtile.utils import guess_terminal
+# from libqtile.extension import dmenu
+# from libqtile.log_utils import logger
 from libqtile import extension
 
 from qtile_extras import widget
-from qtile_extras.widget.decorations import RectDecoration
+# from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras.widget.decorations import PowerLineDecoration
 
 mod = "mod4"
@@ -99,8 +99,11 @@ keys = [
      Key([mod], "F5", lazy.group['SPD'].dropdown_toggle("llm_app_launch")),
      Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
      Key([], "XF86AudioPause", lazy.spawn("playerctl play-pause")),
-     Key([], "XF86AudioPrev", lazy.spawn("playerctl previous")),
-     Key([], "XF86AudioNext", lazy.spawn("playerctl next")),
+     Key([mod, alt], "Backspace", lazy.spawn("playerctl play-pause")),
+     Key([mod, alt], "XF86AudioPrev", lazy.spawn("playerctl previous")),
+     Key([mod, alt], "Minus", lazy.spawn("playerctl previous")),
+     Key([mod, alt], "XF86AudioNext", lazy.spawn("playerctl next")),
+     Key([mod, alt], "Equal", lazy.spawn("playerctl next")),
 
 # Volume Control
      Key([], "XF86AudioRaiseVolume", lazy.spawn(volume_up)),
@@ -286,105 +289,106 @@ keys = [
 
 # Clipboard
     Key([mod], "v", lazy.spawn(clipboard)),
-    Key([mod, alt], "v", lazy.spawn(f"clipcatctl clear")),
+    Key([mod, alt], "v", lazy.spawn("clipcatctl clear")),
 ]
 
+groups = []
 def init_scratchpad():
 
-        # Configuration
-        height =                0.4650
-        y_position =            0.005
-        warp_pointer =            False
-        on_focus_lost_hide =    True
-        opacity =                1
+    # Configuration
+    height =                0.4650
+    y_position =            0.005
+    warp_pointer =            False
+    on_focus_lost_hide =    True
+    opacity =                1
 
-        return [
-            ScratchPad("SPD",
-                [
-                    # Drop down terminal with tmux session
-                    DropDown("terminal",
-                        terminal + f" -o window.opacity=0.9",
-                        y = y_position,
-                        height = height,
-                        on_focus_lost_hide = on_focus_lost_hide,
-                        warp_pointer = warp_pointer,
-                        opacity = opacity),
+    groups.append(
+        ScratchPad("SPD",
+            [
+                # Drop down terminal with tmux session
+                DropDown("terminal",
+                    terminal + " -o window.opacity=0.9",
+                    y = y_position,
+                    height = height,
+                    on_focus_lost_hide = on_focus_lost_hide,
+                    warp_pointer = warp_pointer,
+                    opacity = opacity),
+
+                # Another terminal exclusively for qshell
+                DropDown("qshell",
+                    terminal + " -o window.opacity=0.8 -e qtile shell",
+                    y = y_position,
+                    on_focus_lost_hide = on_focus_lost_hide,
+                    warp_pointer = warp_pointer,
+                    opacity = opacity),
 
                     # Another terminal exclusively for qshell
-                    DropDown("qshell",
-                        terminal + f" -o window.opacity=0.8 -e qtile shell",
-                        y = y_position,
-                        on_focus_lost_hide = on_focus_lost_hide,
-                        warp_pointer = warp_pointer,
-                        opacity = opacity),
+                DropDown("sensors",
+                    console_launcher(sensors),
+                    y = y_position,
+                    x = 0.6,
+                    height = 0.85,
+                    width = 0.4,
+                    on_focus_lost_hide = False,
+                    warp_pointer = warp_pointer,
+                    opacity = opacity),
 
-                        # Another terminal exclusively for qshell
-                    DropDown("sensors",
-                        console_launcher(sensors),
-                        y = y_position,
-                        x = 0.6,
-                        height = 0.85,
-                        width = 0.4,
-                        on_focus_lost_hide = False,
-                        warp_pointer = warp_pointer,
-                        opacity = opacity),
+                # Media Play
+                DropDown("media-play",
+                    musicPlayer,
+                    y = y_position,
+                    x = 0.15,
+                    height = 0.65,
+                    width = 0.7,
+                    warp_pointer = warp_pointer,
+                    opacity = opacity),
 
-                    # Media Play
-                    DropDown("media-play",
-                        musicPlayer,
-                        y = y_position,
-                        x = 0.15,
-                        height = 0.65,
-                        width = 0.7,
-                        warp_pointer = warp_pointer,
-                        opacity = opacity),
+                # Bitwarden
+                DropDown("bitwarden",
+                    # "flatpak run com.bitwarden.desktop",
+                    # match = Match(title="Bitwarden"),
+                    "bitwarden-desktop",
+                    y = y_position,
+                    x = 0.15,
+                    height = 0.65,
+                    width = 0.7,
+                    warp_pointer = warp_pointer,
+                    opacity = opacity),
 
-                    # Bitwarden
-                    DropDown("bitwarden",
-                        # "flatpak run com.bitwarden.desktop",
-                        # match = Match(title="Bitwarden"),
-                        "bitwarden-desktop",
-                        y = y_position,
-                        x = 0.15,
-                        height = 0.65,
-                        width = 0.7,
-                        warp_pointer = warp_pointer,
-                        opacity = opacity),
+                # Gemini
+                DropDown("llm_app_launch",
+                    llm_app_launch,
+                    y = y_position,
+                    x = 0.15,
+                    height = 0.7,
+                    width = 0.7,
+                    warp_pointer = warp_pointer,
+                    opacity = opacity),
 
-                    # Gemini
-                    DropDown("llm_app_launch",
-                        llm_app_launch,
-                        y = y_position,
-                        x = 0.15,
-                        height = 0.7,
-                        width = 0.7,
-                        warp_pointer = warp_pointer,
-                        opacity = opacity),
+                # Calendar
+                DropDown("calendar",
+                    console_launcher(calendar),
+                    y = y_position,
+                    x = 0.7,
+                    width = 0.3,
+                    on_focus_lost_hide = False,
+                    opacity = opacity),
 
-                    # Calendar
-                    DropDown("calendar",
-                        console_launcher(calendar),
-                        y = y_position,
-                        x = 0.7,
-                        width = 0.3,
-                        on_focus_lost_hide = False,
-                        opacity = opacity),
+                # WhatsApp
+                DropDown("whatsapp",
+                    whats_app_launch,
+                    y = y_position,
+                    x = 0.15,
+                    width = 0.7,
+                    height = 0.7,
+                    on_focus_lost_hide = on_focus_lost_hide,
+                    warp_pointer = warp_pointer,
+                    opacity = opacity),
+            ],
+        ),
+    )
 
-                    # WhatsApp
-                    DropDown("whatsapp",
-                        whats_app_launch,
-                        y = y_position,
-                        x = 0.15,
-                        width = 0.7,
-                        height = 0.7,
-                        on_focus_lost_hide = on_focus_lost_hide,
-                        warp_pointer = warp_pointer,
-                        opacity = opacity),
-                ],
-            ),
-        ]
-
-groups = init_scratchpad()
+init_scratchpad()
 
 # FOR QWERTY KEYBOARDS
 group_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0",]
@@ -425,18 +429,19 @@ for i in range(len(group_names)):
 # COLORS FOR THE BAR
 #Theme name : ArcoLinux Default
 def init_colors():
-    return [["#2F343F", "#2F343F"], # color 0
-            ["#2F343F", "#2F343F"], # color 1
-            ["#c0c5ce", "#c0c5ce"], # color 2
-            ["#fba922", "#fba922"], # color 3
-            ["#3384d0", "#3384d0"], # color 4
-            ["#f3f4f5", "#f3f4f5"], # color 5
-            ["#cd1f3f", "#cd1f3f"], # color 6
-            ["#62FF00", "#62FF00"], # color 7
-            ["#6790eb", "#6790eb"], # color 8
-            ["#a9a9a9", "#a9a9a9"], # color 9
-            ["#0c0c0c", "#0c0c0c"], # color 10
-        ]
+    return [
+        ["#2F343F", "#2F343F"], # color 0
+        ["#2F343F", "#2F343F"], # color 1
+        ["#c0c5ce", "#c0c5ce"], # color 2
+        ["#fba922", "#fba922"], # color 3
+        ["#3384d0", "#3384d0"], # color 4
+        ["#f3f4f5", "#f3f4f5"], # color 5
+        ["#cd1f3f", "#cd1f3f"], # color 6
+        ["#62FF00", "#62FF00"], # color 7
+        ["#6790eb", "#6790eb"], # color 8
+        ["#a9a9a9", "#a9a9a9"], # color 9
+        ["#0c0c0c", "#0c0c0c"], # color 10
+    ]
 
 def init_colors_json():
     colors_file = os.path.expanduser('~/.cache/hellwal/colors.json')
@@ -449,11 +454,11 @@ colors = init_colors()
 
 def init_layout_theme():
     return {
-                "margin":2,
-                "border_width":2,
-                "border_focus": "#5e81ac",
-                "border_normal": "#4c566a"
-            }
+        "margin":2,
+        "border_width":2,
+        "border_focus": "#5e81ac",
+        "border_normal": "#4c566a"
+    }
 
 layout_theme = init_layout_theme()
 
@@ -503,154 +508,152 @@ decor_right = {
 # WIDGETS FOR THE BAR
 
 def init_widgets_defaults():
-    return dict(font="Noto Sanws",
-                fontsize = 12)
+    return dict(font="Noto Sanws", fontsize = 12)
 
 widget_defaults = init_widgets_defaults()
 extension_defaults = widget_defaults.copy()
 
 def init_widgets_list():
-    prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
     return [
-            widget.Image(
-                **decor_left,
-                background=colors[9],
-                filename = "~/.icons/custom-download/archlinux-light.svg",
-                foreground='ffffff',
-                margin_x = 5,
-                mouse_callbacks = {"Button1": lambda: qtile.spawn(applicationLaunch)}
-            ),
-            widget.GroupBox(
-                **decor_left,
-                background = colors[1],
-                font="FontAwesome",
-                fontsize = 14,
-                highlight_method = "line",
-                inactive="#B2BEB5",
-                highlight_color = ["#6790eb", "#120a8f",],
-                padding=5,
-            ),
-            widget.CurrentLayoutIcon(
-                **decor_left,
-                custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
-                background="000",
-                foreground=colors[0],
-                padding=10,
-                scale=0.7
-            ),
-            widget.TaskList(
-                **decor_right,
-                background=colors[1],
-                foreground=colors[5],
-                font="FontAwesome",
-                highlight_method="block",  # or border
-                max_title_width=300,
-                fontsize=14,
-                borderwidth=2,
-                border=colors[4],
-                txt_floating="🗗 ",
-                txt_maximized="🗖 ",
-                txt_minimized="🗕 ",
-            ), 
-            widget.ThermalSensor(
-                **decor_right,
-                background = colors[9],
-                foreground = colors[1],
-                foreground_alert = colors[6],
-                metric = True,
-                padding = 5,
-                threshold = 80,
-                font="FontAwesome",
-                fontsize=14,
-                format=' {temp:.0f}{unit}',
-                tag_sensor = "Package id 0",
-                mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'sensors'")},
-            ),
-            widget.TextBox(
-                **decor_right,
-                background = colors[1],
-                foreground=colors[6],
-                font="FontAwesome",
-                text=" ",
-                padding = 0,
-                fontsize=16,
-            ),
-            widget.CPUGraph(
-                **decor_right,
-                background=colors[1],
-                foreground=colors[6],
-                border_color = colors[2],
-                fill_color = colors[8],
-                graph_color = colors[8],
-                border_width = 1,
-                line_width = 1,
-                core = "all",
-                type = "box"
-            ),
-            widget.TextBox(
-                background=colors[2],
-                foreground=colors[4],
-                font="FontAwesome",
-                text="  ",
-                padding = 0,
-                fontsize=16,
-            ),
-            widget.MemoryGraph(
-                **decor_right,
-                background = colors[2],
-                foreground=colors[4],
-                border_color = colors[1],
-                border_width = 1,
-            ),
-            widget.KeyboardLayout(
-                **decor_right,
-                background=colors[1],
-                foreground=colors[5],
-                font="FontAwesome",
-                configured_keyboards = ['us', 'us intl'],
-            ),
-            widget.TextBox(
-                **decor_right,
-                background=colors[10],
-                foreground=colors[5],
-                font="FontAwesome",
-                text="  ",
-                padding = 0,
-                fontsize=16,
-                mouse_callbacks={"Button1": lambda: qtile.spawn(clipboard)},
-            ),
-            widget.Systray(
-                **decor_right,
-                background=colors[1],
-                icon_size=20,
-                padding=5,
-            ),
-            widget.TextBox(
-                background=colors[2],
-                foreground=colors[10],
-                font="FontAwesome",
-                text="  ",
-                padding = 0,
-                fontsize=16,
-                mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'calendar'")}
-            ),
-            widget.Clock(
-                **decor_right,
-                background=colors[2],
-                foreground=colors[10],
-                fontsize=14,
-                format="%d/%m/%Y %H:%M",
-            ),
-            widget.TextBox(
-                font="FontAwesome",
-                text = "⏻",
-                background = colors[4],
-                foreground = colors[6],
-                fontsize = 25,
-                padding = 10,
-                mouse_callbacks={"Button1": lambda: qtile.spawn(rofi_power_menu_cmd)},
-             ),
-            # widget.QuickExit(),
+        widget.Image(
+            **decor_left,
+            background=colors[9],
+            filename = "~/.icons/custom-download/archlinux-light.svg",
+            foreground='ffffff',
+            margin_x = 5,
+            mouse_callbacks = {"Button1": lambda: qtile.spawn(applicationLaunch)}
+        ),
+        widget.GroupBox(
+            **decor_left,
+            background = colors[1],
+            font="FontAwesome",
+            fontsize = 14,
+            highlight_method = "line",
+            inactive="#B2BEB5",
+            highlight_color = ["#6790eb", "#120a8f",],
+            padding=5,
+        ),
+        widget.CurrentLayoutIcon(
+            **decor_left,
+            custom_icon_paths=[os.path.expanduser("~/.config/qtile/icons")],
+            background="000",
+            foreground=colors[0],
+            padding=10,
+            scale=0.7
+        ),
+        widget.TaskList(
+            **decor_right,
+            background=colors[1],
+            foreground=colors[5],
+            font="FontAwesome",
+            highlight_method="block",  # or border
+            max_title_width=300,
+            fontsize=14,
+            borderwidth=2,
+            border=colors[4],
+            txt_floating="🗗 ",
+            txt_maximized="🗖 ",
+            txt_minimized="🗕 ",
+        ), 
+        widget.ThermalSensor(
+            **decor_right,
+            background = colors[9],
+            foreground = colors[1],
+            foreground_alert = colors[6],
+            metric = True,
+            padding = 5,
+            threshold = 80,
+            font="FontAwesome",
+            fontsize=14,
+            format=' {temp:.0f}{unit}',
+            tag_sensor = "Package id 0",
+            mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'sensors'")},
+        ),
+        widget.TextBox(
+            **decor_right,
+            background = colors[1],
+            foreground=colors[6],
+            font="FontAwesome",
+            text=" ",
+            padding = 0,
+            fontsize=16,
+        ),
+        widget.CPUGraph(
+            **decor_right,
+            background=colors[1],
+            foreground=colors[6],
+            border_color = colors[2],
+            fill_color = colors[8],
+            graph_color = colors[8],
+            border_width = 1,
+            line_width = 1,
+            core = "all",
+            type = "box"
+        ),
+        widget.TextBox(
+            background=colors[2],
+            foreground=colors[4],
+            font="FontAwesome",
+            text="  ",
+            padding = 0,
+            fontsize=16,
+        ),
+        widget.MemoryGraph(
+            **decor_right,
+            background = colors[2],
+            foreground=colors[4],
+            border_color = colors[1],
+            border_width = 1,
+        ),
+        widget.KeyboardLayout(
+            **decor_right,
+            background=colors[1],
+            foreground=colors[5],
+            font="FontAwesome",
+            configured_keyboards = ['us', 'us intl'],
+        ),
+        widget.TextBox(
+            **decor_right,
+            background=colors[10],
+            foreground=colors[5],
+            font="FontAwesome",
+            text="  ",
+            padding = 0,
+            fontsize=16,
+            mouse_callbacks={"Button1": lambda: qtile.spawn(clipboard)},
+        ),
+        widget.Systray(
+            **decor_right,
+            background=colors[1],
+            icon_size=20,
+            padding=5,
+        ),
+        widget.TextBox(
+            background=colors[2],
+            foreground=colors[10],
+            font="FontAwesome",
+            text="  ",
+            padding = 0,
+            fontsize=16,
+            mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'calendar'")}
+        ),
+        widget.Clock(
+            **decor_right,
+            background=colors[2],
+            foreground=colors[10],
+            fontsize=14,
+            format="%d/%m/%Y %H:%M",
+        ),
+        widget.TextBox(
+            font="FontAwesome",
+            text = "⏻",
+            background = colors[4],
+            foreground = colors[6],
+            fontsize = 25,
+            padding = 10,
+            mouse_callbacks={"Button1": lambda: qtile.spawn(rofi_power_menu_cmd)},
+         ),
+        # widget.QuickExit(),
     ]
 
 def init_widgets_screen1():
@@ -667,12 +670,13 @@ def init_screens():
         "wallpaper_mode": "stretch",
     }
     return [
-        Screen(**wallpaper, 
-               top=bar.Bar(
-                   widgets=init_widgets_screen1(),
-                   size=30,
-                   opacity= .95,
-                   background = "#fff")),
+        Screen(
+            **wallpaper, 
+            top=bar.Bar(
+                widgets=init_widgets_screen1(),
+                size=30,
+                opacity= .95,
+                background = "#fff")),
         #Screen(**wallpaper, top=bar.Bar(widgets=init_widgets_screen2(), size=30, opacity= .9)),
     ]
 
@@ -683,11 +687,13 @@ mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front()),
+
+    Click([mod], "Button4",   lazy.spawn(volume_up)),
+    Click([mod], "Button5", lazy.spawn(volume_down)),
 ]
 
 @hook.subscribe.startup_once
 def start_once():
-    home = os.path.expanduser('~')
     subprocess.Popen([home + '/.config/qtile/scripts/autostart.sh'])
 
 @hook.subscribe.resume
@@ -698,7 +704,7 @@ dgroups_app_rules = []  # type: list
 dgroups_key_binder = None
 follow_mouse_focus = True
 bring_front_click = False
-cursor_warp = False
+# cursor_warp = False
 floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
@@ -726,7 +732,7 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         # Match(title='Bitwarden'),
-        # Match(role="pop-up"),
+        Match(role="pop-up"),
     ]
 )
 auto_fullscreen = True
