@@ -37,3 +37,20 @@ def window_to_group(window, step, switch_group: bool = False):
     current_index = window.qtile.groups.index(window.group)
     next_index = (current_index + step) % (len(window.qtile.groups)-1)
     window.togroup(window.qtile.groups[next_index].name, switch_group=switch_group)
+
+
+@lazy.function
+def safe_layout_commands(qtile, *cmds):
+    layout = getattr(qtile.current_group, "layout", None)
+    if layout is None:
+        return
+    for cmd in cmds:
+        fn = getattr(layout, cmd, None)
+        if callable(fn):
+            try:
+                fn()
+            except TypeError:
+                try:
+                    fn(qtile)
+                except Exception:
+                    pass
