@@ -25,8 +25,9 @@ def toggle_focus_hide(qtile):
     for dd in sp.dropdowns.values():
         if dd.window and dd.window == win:
             dd.on_focus_lost_hide = not dd.on_focus_lost_hide
+            textEnable = "Enabled" if dd.on_focus_lost_hide else "Disabled"
             qtile.cmd_spawn(
-                f"notify-send 'ScratchPad' '{dd.name}: on_focus_lost_hide = {dd.on_focus_lost_hide}'"
+                f"notify-send 'ScratchPad' '{dd.name.title()}: {textEnable} hide on focus lost '"
             )
             return
 
@@ -54,3 +55,47 @@ def safe_layout_commands(qtile, *cmds):
                     fn(qtile)
                 except Exception:
                     pass
+
+
+@lazy.function
+def move_all_windows_to_group(qtile, to_group_name):
+    dest = qtile.groups_map.get(str(to_group_name))
+    if dest is None:
+        qtile.cmd_spawn(f"notify-send 'Qtile' 'Target group {to_group_name} not found'")
+        return
+
+    src = qtile.current_group 
+    if src is None:
+        qtile.cmd_spawn(f"notify-send 'Qtile' 'Source group {from_group_name} not found'")
+        return
+    if src == dest:
+        qtile.cmd_spawn(f"notify-send 'Qtile' 'Source and destination group are the same'")
+        return
+
+    wins = list(src.windows)
+    if not wins:
+        qtile.cmd_spawn(f"notify-send 'Qtile' 'No windows to move from {src.name}'")
+        return
+
+    for w in wins:
+        try:
+            # call the helper that moves a single window by a relative step
+            w.togroup(dest.name)
+            moved += 1
+        except Exception:
+            pass
+
+    dest.toscreen()
+
+@lazy.function
+def to_group(qtile, group_name):
+    qtile.groups_map[group_name].cmd_toscreen()
+
+@lazy.function
+def send_window_to_group(qtile, group_name):
+    qtile.current_window.togroup(group_name)
+
+@lazy.function
+def change_window_to_group(qtile, group_name):
+    qtile.current_window.togroup(group_name)
+    qtile.groups_map[group_name].cmd_toscreen()

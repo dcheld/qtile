@@ -1,6 +1,7 @@
 from libqtile.config import Key, KeyChord
 from libqtile import extension
 from libqtile.lazy import lazy
+from pathlib import Path
 
 from .settings import (
     mod,
@@ -18,6 +19,7 @@ from .settings import (
     screenshot,
     clipboard,
     musicPlayer,
+    
     volume_up,
     volume_down,
 )
@@ -29,6 +31,9 @@ from .helpers import (
     safe_layout_commands,
 )
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+PLAYER_NOTIFY = str(BASE_DIR / "scripts" / "player_notify.sh")
+
 keys = [
 
 # Most of our keybindings are in sxhkd file - except these
@@ -39,13 +44,13 @@ keys = [
      Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media-play")),
      Key([mod], "F4", lazy.group['SPD'].dropdown_toggle("bitwarden")),
      Key([mod], "F5", lazy.group['SPD'].dropdown_toggle("llm_app_launch")),
-     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
-     Key([], "XF86AudioPause", lazy.spawn("playerctl play-pause")),
-     Key([mod, alt], "Backspace", lazy.spawn("playerctl play-pause")),
-     Key([mod, alt], "XF86AudioPrev", lazy.spawn("playerctl previous")),
-     Key([mod, alt], "Minus", lazy.spawn("playerctl previous")),
-     Key([mod, alt], "XF86AudioNext", lazy.spawn("playerctl next")),
-     Key([mod, alt], "Equal", lazy.spawn("playerctl next")),
+     Key([], "XF86AudioPlay", lazy.spawn(f"sh {PLAYER_NOTIFY} play-pause")),
+     Key([], "XF86AudioPause", lazy.spawn(f"sh {PLAYER_NOTIFY} play-pause")),
+     Key([mod, alt], "Backspace", lazy.spawn(f"sh {PLAYER_NOTIFY} play-pause")),
+     Key([mod, alt], "XF86AudioPrev", lazy.spawn(f"sh {PLAYER_NOTIFY} previous")),
+     Key([mod, alt], "Minus", lazy.spawn(f"sh {PLAYER_NOTIFY} previous")),
+     Key([mod, alt], "XF86AudioNext", lazy.spawn(f"sh {PLAYER_NOTIFY} next")),
+     Key([mod, alt], "Equal", lazy.spawn(f"sh {PLAYER_NOTIFY} next")),
 
 # Volume Control
      Key([], "XF86AudioRaiseVolume", lazy.spawn(volume_up)),
@@ -143,12 +148,6 @@ keys = [
 
 # FLIP LAYOUT FOR MONADTALL/MONADWIDE
     Key([mod, shift], "f", lazy.layout.flip()),
-
-# FLIP LAYOUT FOR BSP
-    Key([mod, alt], "k", lazy.layout.flip_up()),
-    Key([mod, alt], "j", lazy.layout.flip_down()),
-    Key([mod, alt], "l", lazy.layout.flip_right()),
-    Key([mod, alt], "h", lazy.layout.flip_left()),
 
 # MOVE WINDOWS UP OR DOWN BSP LAYOUT
     Key([mod, shift], "k", lazy.layout.shuffle_up()),

@@ -3,7 +3,7 @@ from qtile_conf import widgets as widgets_mod, layouts_screens as ls_mod
 from qtile_conf import mouse_conf, floating_conf, hooks
 
 # Groups (retorna grupos e bindings específicos de grupo)
-groups, group_keys = groups_mod.get_groups_and_keys(settings.mod, settings.alt)
+groups, group_keys = groups_mod.get_groups_and_keys()
 
 # Keys: combina bindings principais com os bindings de grupo
 keys = keys_mod.keys + group_keys

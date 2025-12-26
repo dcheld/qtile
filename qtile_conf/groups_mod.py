@@ -3,7 +3,27 @@ from libqtile.config import Key
 from libqtile.lazy import lazy
 from libqtile import extension
 
-from .settings import terminal, console_launcher, musicPlayer, calendar, whats_app_launch, llm_app_launch, home, sensors
+from .settings import (
+    terminal,
+    console_launcher,
+    musicPlayer,
+    calendar,
+    whats_app_launch,
+    llm_app_launch,
+    home,
+    sensors,
+    mod,
+    ctrl,
+    shift,
+    alt,
+)
+
+from .helpers import (
+    to_group,
+    send_window_to_group,
+    change_window_to_group,
+    move_all_windows_to_group,
+)
 
 # FOR QWERTY KEYBOARDS
 group_names = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
@@ -95,7 +115,7 @@ def add_scratchpad(groups):
     )
 
 
-def get_groups_and_keys(mod, alt):
+def get_groups_and_keys():
     groups = []
 
     # ensure numeric groups exist
@@ -106,9 +126,10 @@ def get_groups_and_keys(mod, alt):
     group_keys = []
     for g in groups:
         group_keys.extend([
-            Key([mod], g.name, lazy.group[g.name].toscreen()),
-            Key([alt, 'shift'], g.name, lazy.window.togroup(g.name)),
-            Key([mod, 'shift'], g.name, lazy.window.togroup(g.name), lazy.group[g.name].toscreen()),
+            Key([mod], g.name, to_group(g.name), desc=f"Switch to group {g.name}"),
+            Key([mod, shift], g.name, send_window_to_group(g.name), desc=f"Move window to group {g.name}"),
+            Key([mod, ctrl], g.name, change_window_to_group(g.name), desc=f"Move window to group {g.name} and switch"),
+            Key([mod, ctrl, shift], g.name, move_all_windows_to_group(g.name), desc=f"Move all windows to group {g.name}"),
         ])
 
     add_scratchpad(groups)
