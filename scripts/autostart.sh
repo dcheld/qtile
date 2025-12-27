@@ -17,6 +17,7 @@ run nm-applet &
 run volctl &
 run blueman-applet &
 run xfce4-power-manager &
+run dunst &
 run redshift &
 run xss-lock --ignore-sleep -- xscreensaver-command -lock &
 run xscreensaver --no-splash &

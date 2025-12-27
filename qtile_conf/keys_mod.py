@@ -195,4 +195,6 @@ keys = [
 # Clipboard
     Key([mod], "v", lazy.spawn(clipboard)),
     Key([mod, alt], "v", lazy.spawn("clipcatctl clear")),
+# Dunst
+    Key([mod], "c", lazy.spawn("dunstctl close-all")),
 ]
