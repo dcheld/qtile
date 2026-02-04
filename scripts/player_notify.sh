@@ -29,7 +29,7 @@ fi
 # If status is 'Stopped', retry a few times to see if it changes (handle transient states)
 attempts=0
 while [ "$status" = "Stopped" ] && [ $attempts -lt 3 ]; do
-  sleep 0.2
+  sleep 0.350
   status=$("$playerctl_cmd" status 2>/dev/null || true)
   attempts=$((attempts + 1))
   if [ -z "$status" ]; then
