@@ -1,5 +1,7 @@
 from libqtile.lazy import lazy
 
+from .cache_manager import set_setting
+
 @lazy.function
 def toggle_minimize_all(qtile):
     for win in qtile.current_group.windows:
@@ -22,13 +24,14 @@ def toggle_focus_hide(qtile):
     sp = qtile.groups_map["SPD"]
     win = qtile.current_window
 
-    for dd in sp.dropdowns.values():
+    for dd in sp.dropdowns.values() :
         if dd.window and dd.window == win:
             dd.on_focus_lost_hide = not dd.on_focus_lost_hide
             textEnable = "Enabled" if dd.on_focus_lost_hide else "Disabled"
             qtile.spawn(
                 f"notify-send 'ScratchPad' '{dd.name.title()}: {textEnable} hide on focus lost '"
             )
+            set_setting(f"scratchpad_{dd.name}_hide", dd.on_focus_lost_hide)
             return
 
     qtile.spawn("notify-send 'ScratchPad' 'No active dropdown window found'")

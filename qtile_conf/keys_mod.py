@@ -41,7 +41,7 @@ keys = [
 # Multimedia Control
      Key([mod], "F1", toggle_focus_hide),
      Key([mod], "F2", lazy.group['SPD'].dropdown_toggle("whatsapp")),
-     Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media-play")),
+     Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media_play")),
      Key([mod], "F4", lazy.group['SPD'].dropdown_toggle("bitwarden")),
      Key([mod], "F5", lazy.group['SPD'].dropdown_toggle("llm_app_launch")),
      Key([], "XF86AudioPlay", lazy.spawn(f"sh {PLAYER_NOTIFY} play-pause")),

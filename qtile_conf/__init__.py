@@ -10,4 +10,5 @@ __all__ = [
     "hooks",
     "mouse_conf",
     "floating_conf",
+    "cache_manager",
 ]
