@@ -10,17 +10,22 @@ function run {
 
 pkill -SIGHUP redshift
 
+# Only run on Xorg, not on Wayland
+if [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
+  # run volctl &
+  run picom &
+  run urxvtd -q -f -o &
+  run xfce4-power-manager &
+else
+  run foot --server &
+fi
+
 #starting utility applications at boot time
-run urxvtd -q -f -o &
-run picom &
 run nm-applet &
-run volctl &
 run blueman-applet &
-run xfce4-power-manager &
 run dunst &
 run redshift &
 run xss-lock --ignore-sleep -- xscreensaver-command -lock &
 run xscreensaver --no-splash &
-# run clipmenud &
 run clipcatd &
 run /usr/bin/lxpolkit &

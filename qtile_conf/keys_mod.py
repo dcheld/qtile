@@ -2,6 +2,20 @@ from libqtile.config import Key, KeyChord
 from libqtile import extension
 from libqtile.lazy import lazy
 from pathlib import Path
+import subprocess
+
+def get_keyboard_layout():
+    try:
+        result = subprocess.run(['setxkbmap', '-query'], capture_output=True, text=True)
+        for line in result.stdout.split('\n'):
+            if line.startswith('layout:'):
+                return line.split(':')[1].strip()
+    except:
+        pass
+    return 'us'  # default
+
+keyboard_layout = get_keyboard_layout()
+toggle_group_key = "apostrophe" if keyboard_layout == "br" else "grave"
 
 from .settings import (
     mod,
@@ -134,7 +148,7 @@ keys = [
     Key([mod, ctrl], "Tab", lazy.screen.next_group(skip_empty = False)),
     Key([mod, ctrl, shift], "Tab", lazy.screen.prev_group(skip_empty = False)),
 
-    Key([mod], "apostrophe", lazy.screen.toggle_group()),
+    Key([mod], toggle_group_key, lazy.screen.toggle_group()),
 
 # RESIZE UP, DOWN, LEFT, RIGHT
     Key([mod, ctrl], "l", safe_layout_commands('grow_right', 'grow', 'increase_ratio', 'delete')),

@@ -1,6 +1,7 @@
 from libqtile import layout
 from libqtile.config import Match
 from .settings import processManager
+import re
 
 # Run the utility of `xprop` to see the wm class and name of an X client.
 # Use these rules to catch common dialogs and helpers.
@@ -30,5 +31,6 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),
         Match(title="pinentry"),
         Match(role="pop-up"),
+        Match(title=re.compile(r"Task Manager.*"))
     ]
 )

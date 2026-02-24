@@ -104,7 +104,7 @@ def add_scratchpad(groups):
                     y=y_position,
                     x=0.7,
                     width=0.3,
-                    on_focus_lost_hide=bool(get_setting("scratchpad_calendar_hide", on_focus_lost_hide)),
+                    on_focus_lost_hide=False,
                     opacity=opacity),
                 DropDown("whatsapp",
                     whats_app_launch,

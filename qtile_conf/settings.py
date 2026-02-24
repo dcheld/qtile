@@ -12,11 +12,13 @@ alt = "mod1"
 ctrl = "control"
 shift = "shift"
 home = os.path.expanduser("~")
+is_wayland = qtile.core.name == "wayland"
 
-if qtile.core.name == "x11":
-    term = "urxvt -e"
-elif qtile.core.name == "wayland":
+if is_wayland:
     term = "foot"
+else:
+    term = "urxvt -e"
+
 
 terminal = "alacritty"
 rofi_power_menu_cmd = f"{home}/.config/rofi/applets/bin/powermenu.sh"

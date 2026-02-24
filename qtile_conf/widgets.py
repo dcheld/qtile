@@ -5,7 +5,7 @@ from qtile_extras import widget
 # from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras.widget.decorations import PowerLineDecoration
 
-from .settings import home, applicationLaunch, clipboard, rofi_power_menu_cmd
+from .settings import home, applicationLaunch, clipboard, rofi_power_menu_cmd, is_wayland
 
 
 def init_colors():
@@ -61,6 +61,20 @@ def init_widgets_defaults():
 widget_defaults = init_widgets_defaults()
 extension_defaults = widget_defaults.copy()
 
+if not is_wayland:
+    tray = widget.Systray(
+        **decor_right,
+        background=colors[1],
+        icon_size=20,
+        padding=5,
+    )
+else:
+    tray = widget.StatusNotifier(
+        **decor_right,
+        background=colors[1],
+        icon_size=20,
+        padding=5,
+    )
 
 def init_widgets_list():
     return [
@@ -114,45 +128,27 @@ def init_widgets_list():
             threshold = 80,
             font="FontAwesome",
             fontsize=14,
-            format=' {temp:.0f}{unit}',
+            format='{temp:.0f}{unit}',
+            fmt=' {}',
             tag_sensor = "Package id 0",
             mouse_callbacks={"Button1": lambda: qtile.spawn("qtile cmd-obj -o group SPD -f dropdown_toggle -a 'sensors'")},
         ),
-        widget.TextBox(
-            **decor_right,
-            background = colors[1],
-            foreground=colors[6],
-            font="FontAwesome",
-            text=" ",
-            padding = 0,
-            fontsize=16,
-        ),
-        widget.CPUGraph(
+        widget.CPU(
             **decor_right,
             background=colors[1],
             foreground=colors[6],
-            border_color = colors[2],
-            fill_color = colors[8],
-            graph_color = colors[8],
-            border_width = 1,
-            line_width = 1,
-            core = "all",
-            type = "box"
+            fontsize=14,
+            format = 'CPU {load_percent:4.1f}%',
+            fmt=' {}',
         ),
-        widget.TextBox(
-            background=colors[2],
-            foreground=colors[4],
-            font="FontAwesome",
-            text="  ",
-            padding = 0,
-            fontsize=16,
-        ),
-        widget.MemoryGraph(
+        widget.Memory(
             **decor_right,
+            font="FontAwesome",
             background = colors[2],
             foreground=colors[4],
-            border_color = colors[1],
-            border_width = 1,
+            fontsize=14,
+            format = 'RAM {MemPercent:4.1f}%',
+            fmt='\uf538 {}',
         ),
         widget.KeyboardLayout(
             **decor_right,
@@ -171,11 +167,27 @@ def init_widgets_list():
             fontsize=16,
             mouse_callbacks={"Button1": lambda: qtile.spawn(clipboard)},
         ),
-        widget.Systray(
+        tray,
+        widget.Volume(
+            emoji=True,
+            background=colors[10],
+            foreground=colors[5],
+            scroll_interval = 1.5,
+            padding = 0,
+            margin = 0,
+            fontsize=14,
+            mouse_callbacks = {"Button1": lambda: qtile.spawn("amixer set Master toggle")},
+        ),
+        widget.PulseVolume(
             **decor_right,
-            background=colors[1],
-            icon_size=20,
-            padding=5,
+            background=colors[10],
+            foreground=colors[5],
+            font="FontAwesome",
+            format="{volume}%",
+            mute_format="{volume}%",
+            margin = 2,
+            fontsize=15,
+            mouse_callbacks={"Button1": lambda: qtile.spawn("pavucontrol")},
         ),
         widget.TextBox(
             background=colors[2],
@@ -198,7 +210,7 @@ def init_widgets_list():
             text = "⏻",
             background = colors[4],
             foreground = colors[6],
-            fontsize = 25,
+            fontsize = 20,
             padding = 10,
             mouse_callbacks={"Button1": lambda: qtile.spawn(rofi_power_menu_cmd)},
          ),
