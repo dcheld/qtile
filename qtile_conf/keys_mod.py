@@ -47,7 +47,7 @@ from .helpers import (
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PLAYER_NOTIFY = str(BASE_DIR / "scripts" / "player_notify.sh")
-QR_CODE = str(BASE_DIR / "scripts" / "read_qr_code.sh")
+QR_CODE = str(BASE_DIR / "scripts" / "qr_code_reader.sh")
 
 keys = [
 
