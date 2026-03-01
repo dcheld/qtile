@@ -47,6 +47,7 @@ from .helpers import (
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PLAYER_NOTIFY = str(BASE_DIR / "scripts" / "player_notify.sh")
+QR_CODE = str(BASE_DIR / "scripts" / "read_qr_code.sh")
 
 keys = [
 
@@ -113,6 +114,7 @@ keys = [
 # PRINT SCREEN
 
     Key([], "Print", lazy.spawn(screenshot), desc="Print screen tool"),
+    Key([alt], "Print", lazy.spawn(f"bash {QR_CODE}"), desc="Read QR code from screen"),
 
 # SUPER + SHIFT KEYS
 
