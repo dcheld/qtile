@@ -46,8 +46,8 @@ from .helpers import (
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-PLAYER_NOTIFY = str(BASE_DIR / "scripts" / "player_notify.sh")
-QR_CODE = str(BASE_DIR / "scripts" / "qr_code_reader.sh")
+PLAYER_NOTIFY = str(BASE_DIR / "scripts" / "player-notify.sh")
+QR_CODE = str(BASE_DIR / "scripts" / "qr-code-reader.sh")
 
 keys = [
 
@@ -59,13 +59,13 @@ keys = [
      Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media_play")),
      Key([mod], "F4", lazy.group['SPD'].dropdown_toggle("bitwarden")),
      Key([mod], "F5", lazy.group['SPD'].dropdown_toggle("llm_app_launch")),
-     Key([], "XF86AudioPlay", lazy.spawn(f"sh {PLAYER_NOTIFY} play-pause")),
-     Key([], "XF86AudioPause", lazy.spawn(f"sh {PLAYER_NOTIFY} play-pause")),
-     Key([mod, alt], "Backspace", lazy.spawn(f"sh {PLAYER_NOTIFY} play-pause")),
-     Key([mod, alt], "XF86AudioPrev", lazy.spawn(f"sh {PLAYER_NOTIFY} previous")),
-     Key([mod, alt], "Minus", lazy.spawn(f"sh {PLAYER_NOTIFY} previous")),
-     Key([mod, alt], "XF86AudioNext", lazy.spawn(f"sh {PLAYER_NOTIFY} next")),
-     Key([mod, alt], "Equal", lazy.spawn(f"sh {PLAYER_NOTIFY} next")),
+     Key([], "XF86AudioPlay", lazy.spawn(f"{PLAYER_NOTIFY} play-pause")),
+     Key([], "XF86AudioPause", lazy.spawn(f"{PLAYER_NOTIFY} play-pause")),
+     Key([mod, alt], "Backspace", lazy.spawn(f"{PLAYER_NOTIFY} play-pause")),
+     Key([mod, alt], "XF86AudioPrev", lazy.spawn(f"{PLAYER_NOTIFY} previous")),
+     Key([mod, alt], "Minus", lazy.spawn(f"{PLAYER_NOTIFY} previous")),
+     Key([mod, alt], "XF86AudioNext", lazy.spawn(f"{PLAYER_NOTIFY} next")),
+     Key([mod, alt], "Equal", lazy.spawn(f"{PLAYER_NOTIFY} next")),
 
 # Volume Control
      Key([], "XF86AudioRaiseVolume", lazy.spawn(volume_up)),
@@ -114,7 +114,7 @@ keys = [
 # PRINT SCREEN
 
     Key([], "Print", lazy.spawn(screenshot), desc="Print screen tool"),
-    Key([alt], "Print", lazy.spawn(f"bash {QR_CODE}"), desc="Read QR code from screen"),
+    Key([alt], "Print", lazy.spawn(f"{QR_CODE}"), desc="Read QR code from screen"),
 
 # SUPER + SHIFT KEYS
 

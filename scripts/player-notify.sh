@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/env bash
+
 # Simple wrapper to run playerctl actions and send a notification with metadata
 action="$1"
 playerctl_cmd="playerctl"
