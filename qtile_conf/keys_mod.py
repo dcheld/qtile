@@ -33,7 +33,6 @@ from .settings import (
     screenshot,
     clipboard,
     musicPlayer,
-    
     volume_up,
     volume_down,
 )
@@ -43,6 +42,8 @@ from .helpers import (
     window_to_previous_group,
     toggle_focus_hide,
     safe_layout_commands,
+    change_llm_player,
+    toggle_llm_player,
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,7 +59,8 @@ keys = [
      Key([mod], "F2", lazy.group['SPD'].dropdown_toggle("whatsapp")),
      Key([mod], "F3", lazy.group['SPD'].dropdown_toggle("media_play")),
      Key([mod], "F4", lazy.group['SPD'].dropdown_toggle("bitwarden")),
-     Key([mod], "F5", lazy.group['SPD'].dropdown_toggle("llm_app_launch")),
+     Key([mod], "F5", toggle_llm_player(), desc="Toggle last selected LLM player"),
+     Key([mod, shift], "F5", change_llm_player(), desc="Open LLM player menu and save selection"),
      Key([], "XF86AudioPlay", lazy.spawn(f"{PLAYER_NOTIFY} play-pause")),
      Key([], "XF86AudioPause", lazy.spawn(f"{PLAYER_NOTIFY} play-pause")),
      Key([mod, alt], "Backspace", lazy.spawn(f"{PLAYER_NOTIFY} play-pause")),

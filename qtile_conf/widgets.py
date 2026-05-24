@@ -61,20 +61,20 @@ def init_widgets_defaults():
 widget_defaults = init_widgets_defaults()
 extension_defaults = widget_defaults.copy()
 
-if not is_wayland:
-    tray = widget.Systray(
-        **decor_right,
-        background=colors[1],
-        icon_size=20,
-        padding=5,
-    )
-else:
-    tray = widget.StatusNotifier(
-        **decor_right,
-        background=colors[1],
-        icon_size=20,
-        padding=5,
-    )
+# if not is_wayland:
+#     tray = widget.Systray(
+#         **decor_right,
+#         background=colors[1],
+#         icon_size=20,
+#         padding=5,
+#     )
+# else:
+tray = widget.StatusNotifier(
+    **decor_right,
+    background=colors[1],
+    icon_size=20,
+    padding=5,
+)
 
 def init_widgets_list():
     return [

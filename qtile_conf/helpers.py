@@ -1,12 +1,24 @@
 from libqtile.lazy import lazy
 
-from .cache_manager import set_setting
+from .cache_manager import get_setting, set_setting
+from .llm_player_manager import llm_player_manager
+
 
 @lazy.function
 def toggle_minimize_all(qtile):
     for win in qtile.current_group.windows:
         if hasattr(win, "toggle_minimize"):
             win.toggle_minimize()
+
+
+@lazy.function
+def change_llm_player(qtile):
+    llm_player_manager.change_player(qtile)
+
+
+@lazy.function
+def toggle_llm_player(qtile):
+    llm_player_manager.toggle_player(qtile)
 
 
 @lazy.window.function
