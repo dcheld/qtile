@@ -1,0 +1,15 @@
+name: qtile
+version: 1.0.0
+description: Configurações pessoais do qtile
+author: Douglas Held
+targets:
+- claude
+- copilot
+dependencies:
+  apm:
+  - boostvolt/claude-code-lsps/pyright
+  mcp: []
+includes: auto
+scripts: {
+  "restore": "apm install --frozen"
+}

@@ -1,0 +1,30 @@
+lockfile_version: '1'
+generated_at: '2026-06-19T15:23:47.004831+00:00'
+apm_version: 0.20.0
+dependencies:
+- repo_url: boostvolt/claude-code-lsps
+  host: github.com
+  resolved_commit: 03956489c6eb27aed3066c79b34a788c3ed27943
+  virtual_path: pyright
+  is_virtual: true
+  package_type: marketplace_plugin
+  deployed_files:
+  - .claude/hooks/pyright/hooks/check-pyright.sh
+  - .github/hooks/pyright-hooks.json
+  - .github/hooks/scripts/pyright/hooks/check-pyright.sh
+  deployed_file_hashes:
+    .claude/hooks/pyright/hooks/check-pyright.sh: sha256:707ab4574bfed90f18a920b1fc70ce101e677a62891bafd7f72f54b4d440a728
+    .github/hooks/pyright-hooks.json: sha256:0841b7104fc14b67c0b2a54fda51bbb66fa785ffc12e9ea8aa2402d409b4b21f
+    .github/hooks/scripts/pyright/hooks/check-pyright.sh: sha256:707ab4574bfed90f18a920b1fc70ce101e677a62891bafd7f72f54b4d440a728
+  content_hash: sha256:26fd5d15e017b8d4a6eadbcf678a2d33978c8d22b2b0fc233ef36696bcb157b9
+lsp_servers:
+- python
+lsp_configs:
+  python:
+    name: python
+    command: pyright-langserver
+    args:
+    - --stdio
+    extensionToLanguage:
+      .py: python
+      .pyi: python

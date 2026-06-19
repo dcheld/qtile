@@ -172,3 +172,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# APM dependencies
+apm_modules/
+
+# Claude Code
+.claude/
+.github/
+
+# Local editor tooling
+.lsp.json
