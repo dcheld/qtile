@@ -37,7 +37,11 @@ musicPlayer = f"""google-chrome-stable --app="http://music.youtube.com/" --class
 browser = "google-chrome-stable"
 sensors = "watch -n 1 sensors"
 ide = "code"
-screenshot = "flameshot gui"
+
+# screenshot = "flameshot gui"
+screenshot = "flatpak run org.flameshot.Flameshot gui"
+os.environ["DEFAULT_SCREENSHOT_COMMAND"] = screenshot
+
 clipboard = "clipcat-menu"
 whats_app_launch = f"""google-chrome-stable --app="https://web.whatsapp.com/" --class=WebApp-WhatsApp3698 --user-data-dir={whatsappProfile}"""
 llm_gemini = f"""google-chrome-stable --app="https://gemini.google.com/app" --class=WebApp-Gemini --name=Gemini --user-data-dir={googleProfile}"""

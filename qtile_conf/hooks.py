@@ -8,4 +8,4 @@ def start_once():
 
 @hook.subscribe.resume
 def resume():
-    subprocess.Popen(['picom','-b'])
+    subprocess.Popen(['picom', '-b'])

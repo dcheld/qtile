@@ -14,7 +14,7 @@ copy_to_clipboard () {
 }
 
 # Tirar screenshot e guardar em ficheiro temporário
-flameshot gui -r > /tmp/qr.png || {
+$DEFAULT_SCREENSHOT_COMMAND -r > /tmp/qr.png || {
     exit 1
 }
 
