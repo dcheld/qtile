@@ -1,10 +1,11 @@
 lockfile_version: '1'
-generated_at: '2026-06-19T15:23:47.004831+00:00'
+generated_at: '2026-06-19T15:33:20.566070+00:00'
 apm_version: 0.20.0
 dependencies:
 - repo_url: boostvolt/claude-code-lsps
   host: github.com
   resolved_commit: 03956489c6eb27aed3066c79b34a788c3ed27943
+  resolved_ref: 0395648
   virtual_path: pyright
   is_virtual: true
   package_type: marketplace_plugin
