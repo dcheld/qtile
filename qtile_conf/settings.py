@@ -38,8 +38,8 @@ browser = "google-chrome-stable"
 sensors = "watch -n 1 sensors"
 ide = "code"
 
-# screenshot = "flameshot gui"
-screenshot = "flatpak run org.flameshot.Flameshot gui"
+screenshot = "flameshot gui"
+# screenshot = "flatpak run org.flameshot.Flameshot gui"
 os.environ["DEFAULT_SCREENSHOT_COMMAND"] = screenshot
 
 clipboard = "clipcat-menu"

@@ -139,11 +139,11 @@ keys = [
     Key([mod], "h", lazy.layout.left()),
     Key([mod], "l", lazy.layout.right()),
 
-    Key([alt], "Tab", lazy.layout.next()),
-    Key([alt, shift ], "Tab", lazy.layout.previous()),
+    Key([alt, ctrl], "Tab", lazy.layout.next()),
+    Key([alt, ctrl, shift ], "Tab", lazy.layout.previous()),
 
-    Key([alt, ctrl], "Tab", lazy.group.next_window(), lazy.window.bring_to_front()),
-    Key([alt, ctrl, shift], "Tab", lazy.group.prev_window(), lazy.window.bring_to_front()),
+    Key([alt], "Tab", lazy.group.next_window(), lazy.window.bring_to_front()),
+    Key([alt, shift], "Tab", lazy.group.prev_window(), lazy.window.bring_to_front()),
 
 #CHANGE SCREEMS
     Key([mod], "Tab", lazy.screen.next_group(skip_empty = True)),
